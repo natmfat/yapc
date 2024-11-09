@@ -8,15 +8,21 @@
     "dev": "remix vite:dev",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "db:nuke": "shitgen nuke --force",
+    "db:seed": "shitgen push ./app/.server/database/schema.sql && tsx ./app/.server/database/seed.ts",
+    "db:generate": "shitgen generate ./app/.server/database/schema.sql --out-file ./app/.server/database/client.ts"
   },
   "dependencies": {
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
     "isbot": "^4.1.0",
+    "natmfat": "^0.0.13",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "remix-endpoint": "^0.0.5",
+    "shitgen": "^0.0.19"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.14.0",
