@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS user_role_ (
 );
 
 -- post update type 
--- published an update vs published a project
+-- published an update, project, post
 CREATE TABLE IF NOT EXISTS update_type_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL
