@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "yapc",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -14,6 +14,7 @@
     "db:generate": "shitgen generate ./app/.server/database/schema.sql --out-file ./app/.server/database/client.ts"
   },
   "dependencies": {
+    "@radix-ui/react-slot": "^1.1.0",
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
@@ -21,6 +22,8 @@
     "natmfat": "^0.0.13",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "remix-auth": "^3.7.0",
+    "remix-auth-github": "^2.0.0",
     "remix-endpoint": "^0.0.5",
     "shitgen": "^0.0.20"
   },

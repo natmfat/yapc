@@ -33,8 +33,8 @@ export const meta: MetaFunction = () => {
 
 export default function Index() {
   return (
-    <View className="max-w-5xl w-full mx-auto px-6 gap-4">
-      <Section className="mt-20">
+    <>
+      <Section>
         <View className="flex-row justify-between items-center">
           <Heading>Community</Heading>
           <Button color="primary">
@@ -128,6 +128,6 @@ export default function Index() {
           </View>
         </View>
       </View>
-    </View>
+    </>
   );
 }

@@ -4,9 +4,9 @@ CREATE TABLE IF NOT EXISTS user_ (
   banner_url text NOT NULL DEFAULT '/banner/default.png',
 
   username text NOT NULL,
-  first_name text,
-  last_name text,
-  bio text,
+  first_name text DEFAULT NULL,
+  last_name text DEFAULT NULL,
+  bio text DEFAULT NULL,
 
   social_twitter text DEFAULT NULL,
   social_github text DEFAULT NULL,
@@ -18,7 +18,12 @@ CREATE TABLE IF NOT EXISTS user_ (
 CREATE TABLE IF NOT EXISTS role_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL,
-  description text NOT NULL
+  description text NOT NULL,
+
+  -- refers to "strength" of permissions
+  -- 0 might mean "base" user, while 3 might mean "moderator" 
+  -- (so anything greater than or equal to 3 can perform a restricted action)
+  level int NOT NULL DEFAULT 0
 );
 
 -- many to many, users can have many roles
@@ -27,6 +32,12 @@ CREATE TABLE IF NOT EXISTS user_role_ (
   role_id bigint REFERENCES role_(id),
 
   PRIMARY KEY (user_id, role_id)
+);
+
+CREATE TABLE IF NOT EXISTS notification (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint REFERENCES user_(id),
+  body text NOT NULL
 );
 
 -- post update type 
@@ -42,7 +53,9 @@ CREATE TABLE IF NOT EXISTS post_ (
   update_type_id bigint REFERENCES update_type_(id),
   heading text NOT NULL,
   body text NOT NULL,
+  embed text DEFAULT NULL,
   stars bigint NOT NULL DEFAULT 0,
+  pinned boolean NOT NULL DEFAULT false,
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -51,7 +64,8 @@ CREATE TABLE IF NOT EXISTS post_ (
 -- post tags
 CREATE TABLE IF NOT EXISTS tag_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name text NOT NULL
+  name text NOT NULL,
+  approved boolean NOT NULL DEFAULT FALSE
 );
 
 -- many to many, post can have many tags
@@ -78,7 +92,7 @@ CREATE TABLE IF NOT EXISTS comment_ (
 CREATE TABLE IF NOT EXISTS featured_ (
   post_id bigint REFERENCES post_(id),
   user_id bigint REFERENCES user_(id),
-  approved boolean NOT NULL DEFAULT false,
+  approved boolean NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
