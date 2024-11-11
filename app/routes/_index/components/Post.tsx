@@ -31,7 +31,7 @@ export function Post() {
             </span>
           </Text>
         </View>
-        <Button className="w-24">
+        <Button className="w-20">
           <RiShiningIcon />0
         </Button>
       </View>

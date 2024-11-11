@@ -39,7 +39,7 @@ export default function Index() {
           <Heading>Community</Heading>
           <Button color="primary">
             <RiUploadIcon />
-            Publish a Repl
+            Publish a Project
           </Button>
         </View>
       </Section>
@@ -53,16 +53,12 @@ export default function Index() {
             icon={<RiGlobalIcon />}
             text="Explore the Community Discord"
           />
-          <FeaturedButton icon={<RiUploadIcon />} text="Submit a Deployment" />
+          <FeaturedButton
+            icon={<RiUploadIcon />}
+            text="Submit and Get Featured"
+          />
         </FeaturedButtonGroup>
       </Featured>
-
-      {/* <View className="px-4 py-3 border-dashed rounded-default border border-interactive items-center flex flex-row gap-3">
-        <Text>Get involved and start yapping in the community Discord.</Text>
-        <Button variant="outline">
-          Explore YAPC <RiArrowRightIcon />
-        </Button>
-      </View> */}
 
       <View className="flex-row gap-8">
         <SectionAside className="w-72">
@@ -113,7 +109,7 @@ export default function Index() {
               placeholder="Search for posts and tags"
               className="max-w-full flex-shrink w-72"
             />
-            <View className="w-24">
+            <View className="w-20">
               <Select defaultValue="hot">
                 <SelectTrigger>
                   <SelectValue />
@@ -121,7 +117,7 @@ export default function Index() {
                 <SelectContent>
                   <SelectItem value="hot">Hot</SelectItem>
                   <SelectItem value="top">Top</SelectItem>
-                  <SelectItem value="rising">Rising</SelectItem>
+                  <SelectItem value="new">New</SelectItem>
                 </SelectContent>
               </Select>
             </View>
