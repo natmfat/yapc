@@ -16,7 +16,7 @@ export default function AppLayout() {
         <Outlet />
       </View>
 
-      <footer></footer>
+      <footer className="h-20"></footer>
     </View>
   );
 }

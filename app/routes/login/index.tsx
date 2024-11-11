@@ -7,16 +7,15 @@ import { tokens } from "natmfat/lib/tokens";
 import { Surface } from "natmfat/components/Surface";
 import { RiGoogleIcon } from "natmfat/icons/RiGoogleIcon";
 import { RiDiscordIcon } from "natmfat/icons/RiDiscordIcon";
-import { RiCheckIcon } from "natmfat/icons/RiCheckIcon";
 import { Input } from "natmfat/components/Input";
 import { Anchor } from "natmfat/components/Anchor";
 import { Separator } from "natmfat/components/Separator";
 import { Text } from "natmfat/components/Text";
-import { ReactNode } from "react";
 import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
 import { RiQuestionMarkIcon } from "natmfat/icons/RiQuestionMarkIcon";
 import { RiArticleIcon } from "natmfat/icons/RiArticleIcon";
 import { RiGamepadIcon } from "natmfat/icons/RiGamepadIcon";
+import { Feature } from "./components/Feature";
 
 export default function Login() {
   return (
@@ -48,7 +47,7 @@ export default function Login() {
             />
             <Feature
               icon={<RiGlobalIcon />}
-              text="Join a community of programmers from all over the world."
+              text="Join an active community of programmers from all over the world."
             />
           </ul>
         </View>
@@ -96,16 +95,5 @@ export default function Login() {
         </View>
       </View>
     </View>
-  );
-}
-
-export function Feature({ text, icon }: { text: string; icon: ReactNode }) {
-  return (
-    <li className="flex items-center text-left gap-4">
-      {icon}
-      <Text maxLines={2} className="flex-1" color="dimmer">
-        {text}
-      </Text>
-    </li>
   );
 }

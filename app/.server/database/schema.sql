@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS user_ (
   banner_url text NOT NULL DEFAULT '/banner/default.png',
 
   username text NOT NULL,
+  email text NOT NULL,
   first_name text DEFAULT NULL,
   last_name text DEFAULT NULL,
   bio text DEFAULT NULL,
@@ -13,6 +14,15 @@ CREATE TABLE IF NOT EXISTS user_ (
   social_discord text DEFAULT NULL,
   social_youtube text DEFAULT NULL,
   social_website text DEFAULT NULL
+);
+
+-- connected account, like github or discord
+-- stores the user id (to verify account), and some identifier of the connection
+CREATE TABLE IF NOT EXISTS provider_ (
+  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  user_id bigint REFERENCES user_(id),
+  name text NOT NULL,
+  profile_id text NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS role_ (
