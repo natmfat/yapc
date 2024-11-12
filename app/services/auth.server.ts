@@ -16,8 +16,6 @@ import bcrypt from "bcrypt";
 // strategies will return and will store in the session
 export const authenticator = new Authenticator<UserData>(sessionStorage);
 
-export const FormStrategyDefaultName = "form-strategy";
-
 invariant(process.env.GITHUB_CLIENT_ID, "expected github client id");
 invariant(process.env.GITHUB_CLIENT_SECRET, "expected github client secret");
 invariant(process.env.GITHUB_REDIRECT_URI, "expected github redirect uri");
@@ -49,7 +47,7 @@ authenticator.use(
     Router.assertResponse(result, "incorrect password");
     return provider.user_id;
   }),
-  FormStrategyDefaultName
+  UserProviderDataStrategy.FORM
 );
 
 authenticator.use(
@@ -64,5 +62,6 @@ authenticator.use(
       // return shitgen.user.findOrCreate({ email: profile.emails[0].value });
       return {} as UserData;
     }
-  )
+  ),
+  UserProviderDataStrategy.GITHUB
 );

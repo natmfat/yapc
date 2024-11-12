@@ -16,6 +16,9 @@ import { RiQuestionMarkIcon } from "natmfat/icons/RiQuestionMarkIcon";
 import { RiArticleIcon } from "natmfat/icons/RiArticleIcon";
 import { RiGamepadIcon } from "natmfat/icons/RiGamepadIcon";
 import { Feature } from "./components/Feature";
+import { Form } from "@remix-run/react";
+
+export const ROUTE = "/login";
 
 export default function Login() {
   return (
@@ -56,10 +59,12 @@ export default function Login() {
         <View className="h-full gap-6 justify-center max-w-xs w-full mx-auto">
           <Heading size="headerDefault">Log in to your account</Heading>
 
-          <View className="gap-2">
-            <Input placeholder="Email or username" />
-            <Input placeholder="Password" />
-            <Button color="primary">Log In</Button>
+          <View className="gap-2" asChild>
+            <Form>
+              <Input placeholder="Email or username" />
+              <Input placeholder="Password" />
+              <Button color="primary">Log In</Button>
+            </Form>
           </View>
 
           <Anchor>Forgot password?</Anchor>
