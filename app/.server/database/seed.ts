@@ -1,5 +1,5 @@
-import { shitgen } from "./client";
-
+import { shitgen, UserProviderDataStrategy } from "./client";
+import bcrypt from "bcrypt";
 async function main() {
   await Promise.all([
     // create users
@@ -7,6 +7,24 @@ async function main() {
       data: {
         avatar_url: "https://natmfat.com/logo.png",
         username: "natmfat",
+      },
+    }),
+
+    // create user providers
+    shitgen.userProvider.create({
+      data: {
+        strategy: UserProviderDataStrategy.FORM,
+        user_id: 0,
+        profile_id: "natmfat",
+        profile_password: await bcrypt.hash("lmao", 1),
+      },
+    }),
+    shitgen.userProvider.create({
+      data: {
+        strategy: UserProviderDataStrategy.GITHUB,
+        user_id: 0,
+        profile_id: "natmfat",
+        profile_password: "",
       },
     }),
 
@@ -31,7 +49,7 @@ async function main() {
 
     // create update types
     ...["update", "project", "post"].map((type) =>
-      shitgen.updateType.create({
+      shitgen.postUpdateType.create({
         data: {
           name: type,
         },

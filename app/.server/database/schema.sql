@@ -3,8 +3,7 @@ CREATE TABLE IF NOT EXISTS user_ (
   avatar_url text NOT NULL,
   banner_url text NOT NULL DEFAULT '/banner/default.png',
 
-  username text NOT NULL,
-  email text NOT NULL,
+  username text DEFAULT NULL,
   first_name text DEFAULT NULL,
   last_name text DEFAULT NULL,
   bio text DEFAULT NULL,
@@ -13,16 +12,19 @@ CREATE TABLE IF NOT EXISTS user_ (
   social_github text DEFAULT NULL,
   social_discord text DEFAULT NULL,
   social_youtube text DEFAULT NULL,
-  social_website text DEFAULT NULL
+  social_website text DEFAULT NULL,
+
+  onboarding_complete boolean NOT NULL DEFAULT false
 );
 
 -- connected account, like github or discord
 -- stores the user id (to verify account), and some identifier of the connection
-CREATE TABLE IF NOT EXISTS provider_ (
+CREATE TABLE IF NOT EXISTS user_provider_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES user_(id),
-  name text NOT NULL,
-  profile_id text NOT NULL
+  strategy ENUM('google', 'discord', 'github', 'form') NOT NULL,
+  profile_id text NOT NULL, -- serves as the username/identifier/email of the provider
+  profile_password text NOT NULL -- serves as the password or auth token of the provider
 );
 
 CREATE TABLE IF NOT EXISTS role_ (
@@ -44,7 +46,7 @@ CREATE TABLE IF NOT EXISTS user_role_ (
   PRIMARY KEY (user_id, role_id)
 );
 
-CREATE TABLE IF NOT EXISTS notification (
+CREATE TABLE IF NOT EXISTS notification_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES user_(id),
   body text NOT NULL
@@ -52,7 +54,7 @@ CREATE TABLE IF NOT EXISTS notification (
 
 -- post update type 
 -- published an update, project, post
-CREATE TABLE IF NOT EXISTS update_type_ (
+CREATE TABLE IF NOT EXISTS post_update_type_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   name text NOT NULL
 );
@@ -60,7 +62,7 @@ CREATE TABLE IF NOT EXISTS update_type_ (
 CREATE TABLE IF NOT EXISTS post_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES user_(id),
-  update_type_id bigint REFERENCES update_type_(id),
+  update_type_id bigint REFERENCES post_update_type_(id),
   heading text NOT NULL,
   body text NOT NULL,
   embed text DEFAULT NULL,
