@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS user_ (
   avatar_url text NOT NULL,
   banner_url text NOT NULL DEFAULT '/banner/default.png',
 
-  username text DEFAULT NULL,
+  username text NOT NULL,
   first_name text DEFAULT NULL,
   last_name text DEFAULT NULL,
   bio text DEFAULT NULL,

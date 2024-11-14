@@ -10,7 +10,8 @@
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
     "db:nuke": "shitgen nuke --force",
-    "db:seed": "shitgen push ./app/.server/database/schema.sql && tsx ./app/.server/database/seed.ts",
+    "db:push": "shitgen push ./app/.server/database/schema.sql",
+    "db:seed": "tsx ./app/.server/database/seed.ts",
     "db:generate": "shitgen generate ./app/.server/database/schema.sql --out-file ./app/.server/database/client.ts"
   },
   "dependencies": {
@@ -18,8 +19,9 @@
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "cookie": "^1.0.1",
+    "immer": "^10.1.1",
     "invariant": "^2.2.4",
     "isbot": "^4.1.0",
     "natmfat": "^0.0.13",
@@ -29,13 +31,14 @@
     "remix-auth-form": "^1.5.0",
     "remix-auth-github": "^2.0.0",
     "remix-endpoint": "^0.0.5",
-    "shitgen": "^0.0.23",
+    "shitgen": "^0.0.24",
     "zod": "^3.23.8",
-    "zod-form-data": "^2.0.2"
+    "zod-form-data": "^2.0.2",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.14.0",
-    "@types/bcrypt": "^5.0.2",
+    "@types/bcryptjs": "^2.4.6",
     "@types/invariant": "^2.2.37",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",

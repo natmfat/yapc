@@ -19,6 +19,7 @@ const database = new MockDatabase({
             "name": "user_",
             "columns": [
                 {
+                    "name": "id",
                     "type": "bigint",
                     "modifierPrimaryKey": true,
                     "modifierNotNull": true,
@@ -26,6 +27,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "avatar_url",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -33,6 +35,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "banner_url",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -40,6 +43,15 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "username",
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "name": "first_name",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -47,6 +59,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "last_name",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -54,6 +67,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "bio",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -61,6 +75,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "social_twitter",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -68,6 +83,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "social_github",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -75,6 +91,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "social_discord",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -82,6 +99,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "social_youtube",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -89,6 +107,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "social_website",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -96,13 +115,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
-                    "type": "text",
-                    "modifierPrimaryKey": false,
-                    "modifierNotNull": false,
-                    "modifierDefault": true,
-                    "reference": null
-                },
-                {
+                    "name": "onboarding_complete",
                     "type": "boolean",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -115,6 +128,7 @@ const database = new MockDatabase({
             "name": "user_provider_",
             "columns": [
                 {
+                    "name": "id",
                     "type": "bigint",
                     "modifierPrimaryKey": true,
                     "modifierNotNull": true,
@@ -122,6 +136,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "user_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -132,6 +147,7 @@ const database = new MockDatabase({
                     }
                 },
                 {
+                    "name": "strategy",
                     "type": "user_provider_strategy_",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -139,6 +155,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "profile_id",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -146,6 +163,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "profile_password",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -158,6 +176,7 @@ const database = new MockDatabase({
             "name": "role_",
             "columns": [
                 {
+                    "name": "id",
                     "type": "bigint",
                     "modifierPrimaryKey": true,
                     "modifierNotNull": true,
@@ -165,6 +184,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "name",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -172,6 +192,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "description",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -179,6 +200,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "level",
                     "type": "int",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -191,6 +213,7 @@ const database = new MockDatabase({
             "name": "user_role_",
             "columns": [
                 {
+                    "name": "user_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -201,6 +224,7 @@ const database = new MockDatabase({
                     }
                 },
                 {
+                    "name": "role_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -216,6 +240,7 @@ const database = new MockDatabase({
             "name": "post_update_type_",
             "columns": [
                 {
+                    "name": "id",
                     "type": "bigint",
                     "modifierPrimaryKey": true,
                     "modifierNotNull": true,
@@ -223,6 +248,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "name",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -235,6 +261,7 @@ const database = new MockDatabase({
             "name": "post_",
             "columns": [
                 {
+                    "name": "id",
                     "type": "bigint",
                     "modifierPrimaryKey": true,
                     "modifierNotNull": true,
@@ -242,6 +269,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "user_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -252,6 +280,7 @@ const database = new MockDatabase({
                     }
                 },
                 {
+                    "name": "update_type_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -262,6 +291,7 @@ const database = new MockDatabase({
                     }
                 },
                 {
+                    "name": "heading",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -269,6 +299,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "body",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -276,6 +307,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "embed",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": false,
@@ -283,6 +315,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "stars",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -290,6 +323,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "pinned",
                     "type": "boolean",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -297,6 +331,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "created_at",
                     "type": "TIMESTAMPTZ",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -304,6 +339,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "updated_at",
                     "type": "TIMESTAMPTZ",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -316,6 +352,7 @@ const database = new MockDatabase({
             "name": "tag_",
             "columns": [
                 {
+                    "name": "id",
                     "type": "bigint",
                     "modifierPrimaryKey": true,
                     "modifierNotNull": true,
@@ -323,6 +360,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "name",
                     "type": "text",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -330,6 +368,7 @@ const database = new MockDatabase({
                     "reference": null
                 },
                 {
+                    "name": "approved",
                     "type": "boolean",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -342,6 +381,7 @@ const database = new MockDatabase({
             "name": "post_tag_",
             "columns": [
                 {
+                    "name": "post_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -352,6 +392,7 @@ const database = new MockDatabase({
                     }
                 },
                 {
+                    "name": "tag_id",
                     "type": "bigint",
                     "modifierPrimaryKey": false,
                     "modifierNotNull": true,
@@ -375,7 +416,7 @@ export type UserData = {
   id: number;
   avatar_url: string;
   banner_url: string;
-  username: string | null;
+  username: string;
   first_name: string | null;
   last_name: string | null;
   bio: string | null;
@@ -387,7 +428,7 @@ export type UserData = {
   onboarding_complete: boolean;
 }
 export type UserAutoGenerated = "id";
-export type UserOptional = "id" | "banner_url" | "username" | "first_name" | "last_name" | "bio" | "social_twitter" | "social_github" | "social_discord" | "social_youtube" | "social_website" | "onboarding_complete";
+export type UserOptional = "id" | "banner_url" | "first_name" | "last_name" | "bio" | "social_twitter" | "social_github" | "social_discord" | "social_youtube" | "social_website" | "onboarding_complete";
 export type UserRelationship = {
 }
 const user = new Model<UserData, UserAutoGenerated, UserOptional, UserRelationship>("user_", database);

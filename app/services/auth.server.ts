@@ -2,7 +2,7 @@ import { Authenticator } from "remix-auth";
 import {
   shitgen,
   UserData,
-  UserProviderDataStrategy,
+  UserProviderStrategy,
 } from "~/.server/database/client";
 import { sessionStorage } from "~/services/session.server";
 import { FormStrategy } from "remix-auth-form";
@@ -10,7 +10,7 @@ import { GitHubStrategy } from "remix-auth-github";
 import invariant from "invariant";
 import { zfd } from "zod-form-data";
 import { Router } from "remix-endpoint";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
@@ -33,7 +33,7 @@ authenticator.use(
     const provider = await shitgen.userProvider.find({
       select: ["profile_password"],
       where: {
-        strategy: UserProviderDataStrategy.FORM,
+        strategy: UserProviderStrategy.FORM,
         profile_id: email,
       },
       include: {
@@ -47,7 +47,7 @@ authenticator.use(
     Router.assertResponse(result, "incorrect password");
     return provider.user_id;
   }),
-  UserProviderDataStrategy.FORM
+  UserProviderStrategy.FORM
 );
 
 authenticator.use(
@@ -63,5 +63,5 @@ authenticator.use(
       return {} as UserData;
     }
   ),
-  UserProviderDataStrategy.GITHUB
+  UserProviderStrategy.GITHUB
 );

@@ -1,79 +1,94 @@
-import { shitgen, UserProviderDataStrategy } from "./client";
-import bcrypt from "bcrypt";
+import { shitgen, UserProviderStrategy } from "./client";
+import bcrypt from "bcryptjs";
+
+/**
+ * Execute an array of promises in order \
+ * Use when order of data actually matters in seeding process (anywhere where you hard code an ID)
+ * @param promises Array of promises
+ */
+async function sequential(promises: Array<Promise<unknown>>) {
+  for (const promise of promises) {
+    await promise;
+  }
+}
+
 async function main() {
-  await Promise.all([
-    // create users
-    shitgen.user.create({
-      data: {
-        avatar_url: "https://natmfat.com/logo.png",
-        username: "natmfat",
-      },
-    }),
+  // create user & providers
+  await shitgen.user.create({
+    data: {
+      avatar_url: "https://natmfat.com/logo.png",
+      username: "natmfat",
+    },
+  });
+  await shitgen.userProvider.create({
+    data: {
+      strategy: UserProviderStrategy.FORM,
+      user_id: 1,
+      profile_id: "natmfat",
+      profile_password: await bcrypt.hash("lmao", 1),
+    },
+  });
+  await shitgen.userProvider.create({
+    data: {
+      strategy: UserProviderStrategy.GITHUB,
+      user_id: 1,
+      profile_id: "natmfat",
+      profile_password: "",
+    },
+  });
 
-    // create user providers
-    shitgen.userProvider.create({
-      data: {
-        strategy: UserProviderDataStrategy.FORM,
-        user_id: 0,
-        profile_id: "natmfat",
-        profile_password: await bcrypt.hash("lmao", 1),
-      },
-    }),
-    shitgen.userProvider.create({
-      data: {
-        strategy: UserProviderDataStrategy.GITHUB,
-        user_id: 0,
-        profile_id: "natmfat",
-        profile_password: "",
-      },
-    }),
-
-    // create user roles
-    ...["moderator", "developer", "subscriber"].map((role) =>
+  // create user roles
+  await sequential(
+    ["moderator", "developer", "subscriber"].map((role) =>
       shitgen.role.create({ data: { name: role, description: "", level: 0 } })
-    ),
+    )
+  );
 
-    // create "approved" tags
-    ...["python", "javascript", "ai", "app"].map((tag) =>
+  // create tags
+  await sequential(
+    ["python", "javascript", "ai", "app"].map((tag) =>
       shitgen.tag.create({
         data: { name: tag, approved: true },
       })
-    ),
+    )
+  );
 
-    // create user-defined tags
-    ...["html", "fun", "game", "simple", "java"].map((tag) =>
+  await sequential(
+    ["html", "fun", "game", "simple", "java"].map((tag) =>
       shitgen.tag.create({
         data: { name: tag },
       })
-    ),
+    )
+  );
 
-    // create update types
-    ...["update", "project", "post"].map((type) =>
+  await sequential(
+    ["update", "project", "post"].map((type) =>
       shitgen.postUpdateType.create({
         data: {
           name: type,
         },
       })
-    ),
+    )
+  );
 
-    // create posts
-    shitgen.post.create({
-      data: {
-        heading: "IDE from the future",
-        body: "I've been really excited about Replit Desktop!",
-        user_id: 0,
-        update_type_id: 0,
-      },
-    }),
-    shitgen.post.create({
-      data: {
-        heading: "Welcome to Yet Another Programming Community!",
-        body: "Idk what to write here, worry about it later",
-        user_id: 0,
-        update_type_id: 0,
-      },
-    }),
-  ]);
+  // create posts
+  await shitgen.post.create({
+    data: {
+      heading: "IDE from the future",
+      body: "I've been really excited about Replit Desktop!",
+      user_id: 1,
+      update_type_id: 1,
+    },
+  });
+  await shitgen.post.create({
+    data: {
+      heading: "Welcome to Yet Another Programming Community!",
+      body: "Idk what to write here, worry about it later",
+      user_id: 1,
+      update_type_id: 1,
+    },
+  });
+
   process.exit(0);
 }
 
