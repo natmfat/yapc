@@ -54,8 +54,8 @@ importers:
         specifier: ^0.0.5
         version: 0.0.5(typescript@5.6.3)
       shitgen:
-        specifier: ^0.0.22
-        version: 0.0.22
+        specifier: ^0.0.23
+        version: 0.0.23
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -3869,8 +3869,8 @@ packages:
     resolution: {integrity: sha512-7++dFhtcx3353uBaq8DDR4NuxBetBzC7ZQOhmTQInHEd6bSrXdiEyzCvG07Z44UYdLShWUyXt5M/yhz8ekcb1A==}
     engines: {node: '>=8'}
 
-  shitgen@0.0.22:
-    resolution: {integrity: sha512-L0LIRYC6g58km0pNBGbnJZTjrhy7RghBbRaxtWqCgms7gHbktkzaMiWjOw2taDmkqnfYzBdQG3gowoqC3/F3xA==}
+  shitgen@0.0.23:
+    resolution: {integrity: sha512-R/LPEX4wR8/eD7YRqZIbRspsjVHSWYr7WAkpHheW7qZY3ztj+1GpVHv9zIXhZU8lIMOm2RzoFvoeeo+FHG2hOQ==}
     hasBin: true
 
   side-channel@1.0.6:
@@ -8673,7 +8673,7 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shitgen@0.0.22:
+  shitgen@0.0.23:
     dependencies:
       assert: 2.1.0
       commander: 12.1.0

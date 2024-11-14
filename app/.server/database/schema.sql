@@ -17,12 +17,14 @@ CREATE TABLE IF NOT EXISTS user_ (
   onboarding_complete boolean NOT NULL DEFAULT false
 );
 
+CREATE TYPE user_provider_strategy_ AS ENUM ('google', 'discord', 'github', 'form');
+
 -- connected account, like github or discord
 -- stores the user id (to verify account), and some identifier of the connection
 CREATE TABLE IF NOT EXISTS user_provider_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES user_(id),
-  strategy ENUM('google', 'discord', 'github', 'form') NOT NULL,
+  strategy user_provider_strategy_ NOT NULL,
   profile_id text NOT NULL, -- serves as the username/identifier/email of the provider
   profile_password text NOT NULL -- serves as the password or auth token of the provider
 );

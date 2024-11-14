@@ -17,6 +17,8 @@ import { RiArticleIcon } from "natmfat/icons/RiArticleIcon";
 import { RiGamepadIcon } from "natmfat/icons/RiGamepadIcon";
 import { Feature } from "./components/Feature";
 import { Form } from "@remix-run/react";
+import { createRoute } from "../auth.$strategy";
+import { UserProviderStrategy } from "~/.server/database/client";
 
 export const ROUTE = "/login";
 
@@ -60,7 +62,7 @@ export default function Login() {
           <Heading size="headerDefault">Log in to your account</Heading>
 
           <View className="gap-2" asChild>
-            <Form>
+            <Form action={createRoute(UserProviderStrategy.FORM)}>
               <Input placeholder="Email or username" />
               <Input placeholder="Password" />
               <Button color="primary">Log In</Button>

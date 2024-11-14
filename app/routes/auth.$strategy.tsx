@@ -1,11 +1,11 @@
 import { redirect } from "@remix-run/node";
 import { RemixAction } from "remix-endpoint";
-import { UserProviderDataStrategy } from "~/.server/database/client";
+import { UserProviderStrategy } from "~/.server/database/client";
 import { authenticator } from "~/services/auth.server";
 import { z } from "zod";
 import { ROUTE as LOGIN_ROUTE } from "./login";
 
-export function createRoute(strategy: UserProviderDataStrategy) {
+export function createRoute(strategy: UserProviderStrategy) {
   return `/auth/${strategy}`;
 }
 
@@ -16,7 +16,7 @@ export async function loader() {
 export const action = new RemixAction()
   .register({
     validate: {
-      params: z.object({ strategy: z.nativeEnum(UserProviderDataStrategy) }),
+      params: z.object({ strategy: z.nativeEnum(UserProviderStrategy) }),
     },
     handler: ({ params: { strategy }, context: { request } }) => {
       return authenticator.authenticate(strategy, request);

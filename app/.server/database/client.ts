@@ -1,8 +1,376 @@
 import { MockDatabase } from "shitgen/MockDatabase";
 import { Model } from "shitgen/client/Model";
 export { sql } from "shitgen/client/sql";
-const database = new MockDatabase({"user_":{"id": {"type":"bigint","modifierPrimaryKey":true,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"avatar_url": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"banner_url": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"username": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"first_name": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"last_name": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"bio": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"social_twitter": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"social_github": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"social_discord": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"social_youtube": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"social_website": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"onboarding_complete": {"type":"boolean","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null}},"user_provider_":{"id": {"type":"bigint","modifierPrimaryKey":true,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"user_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"user_","columnName":"id"}},"strategy": {"type":"ENUM","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":["google","discord","github","form"],"reference":null},"profile_id": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"profile_password": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null}},"role_":{"id": {"type":"bigint","modifierPrimaryKey":true,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"name": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"description": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"level": {"type":"int","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null}},"user_role_":{"user_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"user_","columnName":"id"}},"role_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"role_","columnName":"id"}}},"post_update_type_":{"id": {"type":"bigint","modifierPrimaryKey":true,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"name": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null}},"post_":{"id": {"type":"bigint","modifierPrimaryKey":true,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"user_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"user_","columnName":"id"}},"update_type_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"post_update_type_","columnName":"id"}},"heading": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"body": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"embed": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":false,"modifierDefault":true,"typeArgs":null,"reference":null},"stars": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"pinned": {"type":"boolean","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"created_at": {"type":"TIMESTAMPTZ","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"updated_at": {"type":"TIMESTAMPTZ","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null}},"tag_":{"id": {"type":"bigint","modifierPrimaryKey":true,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null},"name": {"type":"text","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":null},"approved": {"type":"boolean","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":true,"typeArgs":null,"reference":null}},"post_tag_":{"post_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"post_","columnName":"id"}},"tag_id": {"type":"bigint","modifierPrimaryKey":false,"modifierNotNull":true,"modifierDefault":false,"typeArgs":null,"reference":{"tableName":"tag_","columnName":"id"}}}});
-
+const database = new MockDatabase({
+    "types": {
+        "user_provider_strategy_": {
+            "name": "user_provider_strategy_",
+            "type": "enum",
+            "typeArgs": [
+                "google",
+                "discord",
+                "github",
+                "form"
+            ]
+        }
+    },
+    "tables": {
+        "user_": {
+            "name": "user_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": true,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "boolean",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                }
+            ]
+        },
+        "user_provider_": {
+            "name": "user_provider_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": true,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "user_",
+                        "columnName": "id"
+                    }
+                },
+                {
+                    "type": "user_provider_strategy_",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                }
+            ]
+        },
+        "role_": {
+            "name": "role_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": true,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "int",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                }
+            ]
+        },
+        "user_role_": {
+            "name": "user_role_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "user_",
+                        "columnName": "id"
+                    }
+                },
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "role_",
+                        "columnName": "id"
+                    }
+                }
+            ]
+        },
+        "post_update_type_": {
+            "name": "post_update_type_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": true,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                }
+            ]
+        },
+        "post_": {
+            "name": "post_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": true,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "user_",
+                        "columnName": "id"
+                    }
+                },
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "post_update_type_",
+                        "columnName": "id"
+                    }
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": false,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "boolean",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "TIMESTAMPTZ",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "TIMESTAMPTZ",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                }
+            ]
+        },
+        "tag_": {
+            "name": "tag_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": true,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                },
+                {
+                    "type": "text",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": null
+                },
+                {
+                    "type": "boolean",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": true,
+                    "reference": null
+                }
+            ]
+        },
+        "post_tag_": {
+            "name": "post_tag_",
+            "columns": [
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "post_",
+                        "columnName": "id"
+                    }
+                },
+                {
+                    "type": "bigint",
+                    "modifierPrimaryKey": false,
+                    "modifierNotNull": true,
+                    "modifierDefault": false,
+                    "reference": {
+                        "tableName": "tag_",
+                        "columnName": "id"
+                    }
+                }
+            ]
+        }
+    }
+});
+export enum UserProviderStrategy {
+  GOOGLE = "google",
+  DISCORD = "discord",
+  GITHUB = "github",
+  FORM = "form"
+}
 export type UserData = {
   id: number;
   avatar_url: string;
@@ -23,16 +391,10 @@ export type UserOptional = "id" | "banner_url" | "username" | "first_name" | "la
 export type UserRelationship = {
 }
 const user = new Model<UserData, UserAutoGenerated, UserOptional, UserRelationship>("user_", database);
-export enum UserProviderDataStrategy {
-  GOOGLE = "google",
-  DISCORD = "discord",
-  GITHUB = "github",
-  FORM = "form"
-}
 export type UserProviderData = {
   id: number;
   user_id: number;
-  strategy: UserProviderDataStrategy;
+  strategy: UserProviderStrategy;
   profile_id: string;
   profile_password: string;
 }
@@ -42,7 +404,6 @@ export type UserProviderRelationship = {
   user_id: UserData;
 }
 const userProvider = new Model<UserProviderData, UserProviderAutoGenerated, UserProviderOptional, UserProviderRelationship>("user_provider_", database);
-
 export type RoleData = {
   id: number;
   name: string;
@@ -54,7 +415,6 @@ export type RoleOptional = "id" | "level";
 export type RoleRelationship = {
 }
 const role = new Model<RoleData, RoleAutoGenerated, RoleOptional, RoleRelationship>("role_", database);
-
 export type UserRoleData = {
   user_id: number;
   role_id: number;
@@ -66,7 +426,6 @@ export type UserRoleRelationship = {
   role_id: RoleData;
 }
 const userRole = new Model<UserRoleData, UserRoleAutoGenerated, UserRoleOptional, UserRoleRelationship>("user_role_", database);
-
 export type PostUpdateTypeData = {
   id: number;
   name: string;
@@ -76,7 +435,6 @@ export type PostUpdateTypeOptional = "id";
 export type PostUpdateTypeRelationship = {
 }
 const postUpdateType = new Model<PostUpdateTypeData, PostUpdateTypeAutoGenerated, PostUpdateTypeOptional, PostUpdateTypeRelationship>("post_update_type_", database);
-
 export type PostData = {
   id: number;
   user_id: number;
@@ -96,7 +454,6 @@ export type PostRelationship = {
   update_type_id: PostUpdateTypeData;
 }
 const post = new Model<PostData, PostAutoGenerated, PostOptional, PostRelationship>("post_", database);
-
 export type TagData = {
   id: number;
   name: string;
@@ -107,7 +464,6 @@ export type TagOptional = "id" | "approved";
 export type TagRelationship = {
 }
 const tag = new Model<TagData, TagAutoGenerated, TagOptional, TagRelationship>("tag_", database);
-
 export type PostTagData = {
   post_id: number;
   tag_id: number;
