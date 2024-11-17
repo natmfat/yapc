@@ -26,9 +26,10 @@ import { UserData, RoleData } from "~/.server/database/client";
 interface UserDetailsProps {
   user: UserData;
   roles: RoleData[];
+  stars?: number;
 }
 
-export function UserProfile({ user, roles }: UserDetailsProps) {
+export function UserProfile({ user, roles, stars = 0 }: UserDetailsProps) {
   const userSession = useUserStore((state) => state.session);
   const owner = userSession && userSession.username === user.username;
 
@@ -83,11 +84,11 @@ export function UserProfile({ user, roles }: UserDetailsProps) {
           ) : null}
         </View>
         <Heading level={1} size="headerDefault" className="mt-2">
-          {user.first_name || "Anonymous User"} {user.last_name}
+          {user.first_name || user.username} {user.last_name}
         </Heading>
-        <Heading level={2} size="subheadDefault" color="dimmer">
-          {user.username}
-        </Heading>
+        <Text color="dimmer">
+          {user.username} ({stars})
+        </Text>
 
         <Text maxLines={2}>{user.bio}</Text>
 

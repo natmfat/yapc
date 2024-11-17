@@ -14,7 +14,6 @@ import { RiUploadIcon } from "natmfat/icons/RiUploadIcon";
 import { SectionAside, SectionAsideItem } from "./components/SectionAside";
 import { Tag } from "./components/SectionAside/Tag";
 import { Pinned } from "./components/SectionAside/Pinned";
-import { Post } from "./components/Post";
 import { LeaderboardItem } from "./components/SectionAside/Loaderboard";
 import {
   Featured,
@@ -23,6 +22,7 @@ import {
   FeaturedButton,
 } from "./components/Featured";
 import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
+import { shitgen } from "~/.server/database/client";
 
 export const meta: MetaFunction = () => {
   return [
@@ -30,6 +30,12 @@ export const meta: MetaFunction = () => {
     { name: "description", content: "Welcome to Remix!" },
   ];
 };
+
+export async function loader() {
+  return {
+    tags: await shitgen.postTag.findMany({}),
+  };
+}
 
 export default function Index() {
   return (
@@ -122,10 +128,7 @@ export default function Index() {
               </Select>
             </View>
           </View>
-          <View className="mt-3">
-            <Post />
-            <Post />
-          </View>
+          <View className="mt-3"></View>
         </View>
       </View>
     </>

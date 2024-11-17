@@ -1,4 +1,4 @@
-import { shitgen, UserProviderStrategy } from "./client";
+import { PostUpdateType, shitgen, UserProviderStrategy } from "./client";
 import bcrypt from "bcryptjs";
 
 /**
@@ -61,23 +61,14 @@ async function main() {
     )
   );
 
-  await sequential(
-    ["update", "project", "post"].map((type) =>
-      shitgen.postUpdateType.create({
-        data: {
-          name: type,
-        },
-      })
-    )
-  );
-
   // create posts
   await shitgen.post.create({
     data: {
       heading: "IDE from the future",
       body: "I've been really excited about Replit Desktop!",
       user_id: 1,
-      update_type_id: 1,
+      thumbnail_url: "https://natmfat.com/logo.png",
+      update_type: PostUpdateType.UPDATE,
     },
   });
   await shitgen.post.create({
@@ -85,7 +76,8 @@ async function main() {
       heading: "Welcome to Yet Another Programming Community!",
       body: "Idk what to write here, worry about it later",
       user_id: 1,
-      update_type_id: 1,
+      thumbnail_url: "https://natmfat.com/logo.png",
+      update_type: PostUpdateType.UPDATE,
     },
   });
 

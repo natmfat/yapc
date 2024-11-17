@@ -1,3 +1,8 @@
+CREATE TYPE user_provider_strategy_ AS ENUM ('google', 'discord', 'github', 'form');
+
+CREATE TYPE post_update_type_ AS ENUM ('update', 'project', 'article');
+
+
 CREATE TABLE IF NOT EXISTS user_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   avatar_url text NOT NULL,
@@ -16,8 +21,6 @@ CREATE TABLE IF NOT EXISTS user_ (
 
   onboarding_complete boolean NOT NULL DEFAULT false
 );
-
-CREATE TYPE user_provider_strategy_ AS ENUM ('google', 'discord', 'github', 'form');
 
 -- connected account, like github or discord
 -- stores the user id (to verify account), and some identifier of the connection
@@ -54,22 +57,19 @@ CREATE TABLE IF NOT EXISTS notification_ (
   body text NOT NULL
 );
 
--- post update type 
--- published an update, project, post
-CREATE TABLE IF NOT EXISTS post_update_type_ (
-  id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  name text NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS post_ (
   id bigint PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   user_id bigint REFERENCES user_(id),
-  update_type_id bigint REFERENCES post_update_type_(id),
+  update_type post_update_type_ NOT NULL,
+  thumbnail_url text NOT NULL,
   heading text NOT NULL,
   body text NOT NULL,
   embed text DEFAULT NULL,
-  stars bigint NOT NULL DEFAULT 0,
   pinned boolean NOT NULL DEFAULT false,
+
+  stat_stars bigint NOT NULL DEFAULT 0,
+  stat_views bigint NOT NULL DEFAULT 0,
+  -- stat_comments - derived property that we should add
 
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
