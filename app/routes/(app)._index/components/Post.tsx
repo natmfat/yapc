@@ -1,4 +1,5 @@
 import { Prisma, User } from "@prisma/client";
+import { Link } from "@remix-run/react";
 import { Avatar } from "natmfat/components/Avatar";
 import { Button } from "natmfat/components/Button";
 import { Heading } from "natmfat/components/Heading";
@@ -13,6 +14,8 @@ import { RiEyeIcon } from "natmfat/icons/RiEyeIcon";
 import { RiShiningIcon } from "natmfat/icons/RiShiningIcon";
 import { tokens } from "natmfat/lib/tokens";
 import { ReactNode } from "react";
+import { createRoute } from "~/routes/(app).$username.$postSlug";
+import { Author } from "~/routes/(app)/components/Author";
 
 interface PostProps {
   post: Prisma.PostGetPayload<{
@@ -35,61 +38,56 @@ export function Post({ user, post }: PostProps) {
   return (
     <View className="py-3 gap-2">
       <View className="flex-row items-center justify-between">
-        <View className="flex-row gap-2">
-          <Avatar
-            size={tokens.space24}
-            src={user.avatarUrl}
-            username={user.username}
-          />
-          <Text>
-            {user.username}{" "}
-            <span className="text-foreground-dimmer">
-              published an {post.type.toLocaleLowerCase()}{" "}
-              <span className="px-1">•</span>{" "}
-              <Timestamp date={post.createdAt} className="align-top" />
-            </span>
-          </Text>
+        <View className="flex-row gap-1 items-center">
+          <Author user={user} />
+          <span className="text-foreground-dimmer flex flex-row items-center gap-1">
+            published an {post.type.toLocaleLowerCase()}
+            <span>•</span>
+            <Timestamp date={post.createdAt} className="align-top" />
+          </span>
         </View>
         <Button className="w-20">
           <RiShiningIcon /> {post.stars}
         </Button>
       </View>
 
-      <Interactive className="p-2">
-        <View className="gap-2">
-          <View className="flex-row gap-2">
-            <img
-              className="w-20 h-20 rounded-default border border-interactive"
-              src={post.thumbnailUrl}
-            />
-            <View>
-              <Heading size="subheadBig">{post.heading}</Heading>
-              <Text>{post.body}</Text>
+      <Link to={createRoute(user.username, post.slug)}>
+        <Interactive className="p-2">
+          <View className="gap-2">
+            <View className="flex-row gap-2">
+              <img
+                className="w-20 h-20 rounded-default border border-interactive"
+                src={post.thumbnailUrl}
+              />
+              <View>
+                <Heading size="subheadBig">{post.heading}</Heading>
+                <Text>{post.body}</Text>
+              </View>
             </View>
-          </View>
 
-          <View className="flex-row justify-between">
-            <View className="flex-row">
-              <PostStat icon={<RiChat4Icon />} count={post._count.comments} />
-              <PostStat icon={<RiShiningIcon />} count={post.stars} />
-              <PostStat icon={<RiEyeIcon />} count={post.views} />
+            <View className="flex-row justify-between">
+              <View className="flex-row">
+                <PostStat icon={<RiChat4Icon />} count={post._count.comments} />
+                <PostStat icon={<RiShiningIcon />} count={post.stars} />
+                <PostStat icon={<RiEyeIcon />} count={post.views} />
+              </View>
+              <Surface
+                elevated
+                className="bg-transparent flex-row items-center gap-1"
+              >
+                {post.tags.map((tag) => (
+                  <Pill>#{tag.name}</Pill>
+                ))}
+                {remainingTags > 0 ? (
+                  <Text size="small" color="dimmer">
+                    +{remainingTags}
+                  </Text>
+                ) : null}
+              </Surface>
             </View>
-            <Surface
-              elevated
-              className="bg-transparent flex-row items-center gap-1"
-            >
-              {post.tags.map((tag) => (
-                <Pill>#{tag.name}</Pill>
-              ))}
-              {remainingTags > 0 ? (
-                <Text size="small" color="dimmer">
-                  +{remainingTags}
-                </Text>
-              ) : null}
-            </Surface>
           </View>
-        </View>
-      </Interactive>
+        </Interactive>
+      </Link>
     </View>
   );
 }

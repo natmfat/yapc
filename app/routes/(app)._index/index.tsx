@@ -35,6 +35,11 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   return {
+    posts: await prisma.post.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
     tags: await prisma.tag.findMany(),
   };
 }

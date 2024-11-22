@@ -4,7 +4,12 @@ import { prisma } from "./prisma";
 
 export function getStars(
   user: Pick<
-    Prisma.UserGetPayload<{ include: { posts: true; comments: true } }>,
+    Prisma.UserGetPayload<{
+      include: {
+        posts: { select: { stars: true } };
+        comments: { select: { stars: true } };
+      };
+    }>,
     "posts" | "comments"
   >
 ) {
@@ -16,6 +21,14 @@ export function getStars(
     stars += comment.stars;
   }
   return stars;
+}
+
+export function removeKeys<T>(data: T, keys: Array<keyof T>) {
+  const dataClone = { ...data };
+  for (const key of keys) {
+    delete dataClone[key];
+  }
+  return dataClone;
 }
 
 // max url length is 2048 characters, this seems reasonable

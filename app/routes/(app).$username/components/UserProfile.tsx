@@ -19,9 +19,12 @@ import { spaceTokens, tokens } from "natmfat/lib/tokens";
 import { CopyIconButton } from "~/components/CopyIconButton";
 import { ListItem } from "~/components/ListItem";
 
-import { useUserStore } from "../../(app)/hooks/useUserStore";
+import { useSessionStore } from "../../(app)/hooks/useSessionStore";
 import { UserRole } from "./UserRole";
 import { User } from "@prisma/client";
+import { RiAddIcon } from "natmfat/icons/RiAddIcon";
+import { RiCalendarIcon } from "natmfat/icons/RiCalendarIcon";
+import { Timestamp } from "natmfat/components/Timestamp";
 
 interface UserDetailsProps {
   user: User;
@@ -29,11 +32,11 @@ interface UserDetailsProps {
 }
 
 export function UserProfile({ user, stars }: UserDetailsProps) {
-  const userSession = useUserStore((state) => state.session);
+  const userSession = useSessionStore((state) => state.data);
   const owner = userSession && userSession.username === user.username;
 
   return (
-    <View className="overflow-x-hidden w-4/12">
+    <View className="overflow-x-hidden flex-shrink-0 w-4/12">
       <View className="w-full bg-blue-dimmest relative h-28 rounded-default">
         <RiSquareIcon className="text-white bottom-4 right-4 absolute" />
       </View>
@@ -44,53 +47,53 @@ export function UserProfile({ user, stars }: UserDetailsProps) {
           size={spaceTokens.space96}
         />
         <View className="absolute flex-row items-center gap-2 top-16 right-0 pt-2 pr-4">
-          {!owner ? (
-            <Popover>
-              <PopoverTrigger asChild>
-                <IconButton
-                  size={tokens.space24}
-                  alt="More user detail options"
-                  className="h-8 w-8"
-                >
-                  <RiMoreIcon />
-                </IconButton>
-              </PopoverTrigger>
-              <PopoverContent className="px-0 py-1.5">
-                <ListItem dangerous>
-                  <RiFlagIcon className="text-red-stronger" />
-                  Report
-                </ListItem>
-                <ListItem dangerous>
-                  <RiSpamIcon />
-                  Block
-                </ListItem>
-              </PopoverContent>
-            </Popover>
-          ) : null}
+          <Popover>
+            <PopoverTrigger asChild>
+              <IconButton
+                size={tokens.space24}
+                alt="More user detail options"
+                className="h-8 w-8"
+              >
+                <RiMoreIcon />
+              </IconButton>
+            </PopoverTrigger>
+            <PopoverContent className="px-0 py-1.5">
+              <ListItem>
+                <RiLinkIcon />
+                Copy link to profile
+              </ListItem>
+              {!owner ? (
+                <>
+                  <ListItem dangerous>
+                    <RiSpamIcon />
+                    Block @{user.username}
+                  </ListItem>
+                  <ListItem dangerous>
+                    <RiFlagIcon />
+                    Report @{user.username}
+                  </ListItem>
+                </>
+              ) : null}
+            </PopoverContent>
+          </Popover>
 
-          <CopyIconButton
-            size={tokens.space24}
-            icon={<RiLinkIcon />}
-            text={typeof window === "undefined" ? "" : location.href}
-            className="h-8 w-8 bg-interactive hover:bg-interactive-active duration-chill transition-background"
-            color="transparent"
-          />
           {owner ? (
             <Button color="transparent">
               <RiEditIcon />
               Edit Profile
             </Button>
-          ) : null}
+          ) : (
+            <Button>
+              <RiAddIcon />
+              Follow
+            </Button>
+          )}
         </View>
         <Heading level={1} size="headerDefault" className="mt-2">
           {user.firstName || user.username} {user.lastName}
         </Heading>
-        <Text color="dimmer">
-          {user.username} ({stars})
-        </Text>
-
+        <Text color="dimmer">@{user.username}</Text>
         <Text maxLines={2}>{user.bio}</Text>
-
         <View className="flex-row flex-wrap gap-2 mt-1">
           {user.roles.map((role) => (
             <UserRole role={role} key={role} />

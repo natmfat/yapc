@@ -34,6 +34,8 @@ model User {
   posts         Post[]
   notifications Notification[]
   comments      Comment[]
+  followers     Follows[]      @relation("following")
+  following     Follows[]      @relation("follower")
 }
 
 enum UserRole {
@@ -60,6 +62,15 @@ enum UserProviderStrategy {
   DISCORD
   GITHUB
   FORM
+}
+
+model Follows {
+  follower    User @relation("follower", fields: [followerId], references: [id])
+  followerId  Int
+  following   User @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  @@id([followerId, followingId])
 }
 
 model Notification {
@@ -103,8 +114,7 @@ enum PostType {
 }
 
 model Tag {
-  id       Int     @id @default(autoincrement())
-  name     String
+  name     String  @id @unique
   official Boolean @default(false)
   posts    Post[]
 }

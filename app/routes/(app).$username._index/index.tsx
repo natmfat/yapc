@@ -1,7 +1,4 @@
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
-import { View } from "natmfat/components/View";
-import { UserProfile } from "./components/UserProfile";
 import { Router } from "remix-endpoint";
 import {
   Tabs,
@@ -13,14 +10,16 @@ import { Post } from "../(app)._index/components/Post";
 import { RiChat4Icon } from "natmfat/icons/RiChat4Icon";
 import { RiTerminalBoxIcon } from "natmfat/icons/RiTerminalBoxIcon";
 import { prisma } from "~/.server/prisma";
-import { getStars } from "~/.server/prismaUtils";
 import { notFound } from "~/.server/routeUtils";
+import { useLoaderData } from "@remix-run/react";
+import { useUserStore } from "../(app).$username/hooks/useUserStore";
+import invariant from "invariant";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   Router.assertResponse(params.username, notFound());
   const user = await prisma.user.findFirst({
     where: { username: params.username },
-    include: {
+    select: {
       posts: {
         include: {
           tags: true,
@@ -33,38 +32,34 @@ export async function loader({ params }: LoaderFunctionArgs) {
     },
   });
   Router.assertResponse(user, notFound());
-
   return {
-    user,
-    stars: getStars(user),
+    posts: user.posts,
+    comments: user?.comments,
   };
 }
 
 export default function PortfoliosPage() {
-  const { user, stars } = useLoaderData<typeof loader>();
+  const { posts, comments } = useLoaderData<typeof loader>();
+  const user = useUserStore((state) => state.data);
+  invariant(user, "Expected user to exist");
+
   return (
-    <View className="flex-row items-start gap-4">
-      <UserProfile user={user} stars={stars} />
-      <Tabs defaultValue="posts" className="w-full">
-        <TabsList>
-          <TabsTrigger value="posts">
-            <RiTerminalBoxIcon />
-            Projects
-          </TabsTrigger>
-          <TabsTrigger value="replies">
-            <RiChat4Icon />
-            Comments
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="posts">
-          {user.posts.map((post) => (
-            <Post key={post.id} post={post} user={user} />
-          ))}
-        </TabsContent>
-      </Tabs>
-      {/* <View className="flex-1 w-full">
-        <Outlet />
-      </View> */}
-    </View>
+    <Tabs defaultValue="posts" className="w-full">
+      <TabsList>
+        <TabsTrigger value="posts">
+          <RiTerminalBoxIcon />
+          Projects
+        </TabsTrigger>
+        <TabsTrigger value="replies">
+          <RiChat4Icon />
+          Comments
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value="posts">
+        {posts.map((post) => (
+          <Post key={post.id} post={post} user={user} />
+        ))}
+      </TabsContent>
+    </Tabs>
   );
 }

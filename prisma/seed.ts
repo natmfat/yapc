@@ -61,6 +61,18 @@ async function main() {
         authorId: 1,
         thumbnailUrl: "",
         type: PostType.ARTICLE,
+        tags: {
+          connectOrCreate: [
+            {
+              create: {
+                name: "lmao",
+              },
+              where: {
+                name: "lmao",
+              },
+            },
+          ],
+        },
       },
     }),
     prisma.post.create({

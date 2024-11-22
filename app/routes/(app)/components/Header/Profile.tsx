@@ -33,7 +33,7 @@ export function Profile({ user }: Pick<HeaderProps, "user">) {
           </View>
         </Interactive>
       </PopoverTrigger>
-      <PopoverContent className="p-0 w-44">
+      <PopoverContent className="p-0 pb-1.5 w-44">
         <View className="flex-row p-4 items-center gap-2">
           <Avatar
             size={tokens.space32}
@@ -61,7 +61,7 @@ export function Profile({ user }: Pick<HeaderProps, "user">) {
 
         <Separator />
 
-        <ListItem className="px-4 rounded-b-default" asChild>
+        <ListItem className="px-4" asChild>
           <Link to="/logout">
             <RiLogoutBoxIcon />
             <Text>Logout</Text>

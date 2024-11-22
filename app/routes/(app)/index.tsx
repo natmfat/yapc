@@ -3,8 +3,7 @@ import { View } from "natmfat/components/View";
 import { Header } from "./components/Header";
 import { authenticator } from "~/services/auth.server";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import { UserStoreProvider } from "./hooks/useUserStore";
-import { UserData } from "~/.server/database/client";
+import { SessionStoreProvider } from "./hooks/useSessionStore";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const userSession = await authenticator.isAuthenticated(request);
@@ -14,7 +13,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export default function AppLayout() {
   return (
-    <UserStoreProvider session={null} sessionRoles={[]}>
+    <SessionStoreProvider data={null}>
       <View className="max-w-5xl w-full mx-auto px-6">
         <Header
           user={{
@@ -29,6 +28,6 @@ export default function AppLayout() {
 
         <footer className="h-20"></footer>
       </View>
-    </UserStoreProvider>
+    </SessionStoreProvider>
   );
 }
