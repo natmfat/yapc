@@ -2,7 +2,7 @@ import { RemixLoader } from "remix-endpoint";
 import { authenticator } from "~/services/auth.server";
 
 import { z } from "zod";
-import { ROUTE as LOGIN_ROUTE } from "./login";
+import { ROUTE as LOGIN_ROUTE } from "./(auth).login";
 import { UserProviderStrategy } from "@prisma/client";
 
 export const loader = new RemixLoader()

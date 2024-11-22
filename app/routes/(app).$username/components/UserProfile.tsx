@@ -37,7 +37,7 @@ export function UserProfile({ user, stars }: UserDetailsProps) {
 
   return (
     <View className="overflow-x-hidden flex-shrink-0 w-4/12">
-      <View className="w-full bg-blue-dimmest relative h-28 rounded-default">
+      <View className="w-full bg-blue-dimmest relative aspect-[12/5] rounded-default">
         <RiSquareIcon className="text-white bottom-4 right-4 absolute" />
       </View>
       <View className="-translate-y-16 relative p-4">

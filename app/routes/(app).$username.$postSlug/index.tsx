@@ -50,16 +50,15 @@ export default function PostPage() {
   const { post } = useLoaderData<typeof loader>();
   return (
     <View className="gap-2">
-      <View className="flex-row justify-between flex-1 overflow-hidden">
-        <View className="flex-row items-center gap-2 flex-1">
-          <img
-            className="border border-interactive rounded-default h-8 w-8 flex-shrink-0"
-            src={post.thumbnailUrl}
-          />
-          <Heading size="headerDefault" className="flex-1">
-            {post.heading}
-          </Heading>
-        </View>
+      <img
+        src={post.thumbnailUrl}
+        className="w-full aspect-[12/5] rounded-default border border-interactive"
+      />
+
+      <View className="flex-row gap-2 justify-between">
+        <Heading size="headerDefault" className="flex-1">
+          {post.heading}
+        </Heading>
 
         <View className="flex-row gap-2 flex-shrink-0">
           <Button>

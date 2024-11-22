@@ -15,18 +15,28 @@ import { Text } from "natmfat/components/Text";
 import { View } from "natmfat/components/View";
 import { RiImageIcon } from "natmfat/icons/RiImageIcon";
 import { RiMarkdownIcon } from "natmfat/icons/RiMarkdownIcon";
-import { ReactNode, useRef, useState } from "react";
+import { ChangeEvent, ReactNode, useCallback, useRef, useState } from "react";
 import { Markdown } from "./Markdown";
 
 export function MarkdownInput({
   value: overrideValue,
+  onChange: overrideOnChange,
   defaultValue,
-  onChange,
   ...props
 }: MultilineInputProps) {
   const [localValue, setLocalValue] = useState(defaultValue);
   const value = overrideValue || localValue;
   const ref = useRef<HTMLTextAreaElement>(null);
+
+  const onChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      if (overrideOnChange) {
+        overrideOnChange(e);
+      }
+      setLocalValue(e.target.value);
+    },
+    [overrideOnChange]
+  );
 
   return (
     <Tabs defaultValue="write">
@@ -42,7 +52,7 @@ export function MarkdownInput({
             className="w-full"
             ref={ref}
             value={value}
-            onChange={onChange || ((e) => setLocalValue(e.target.value))}
+            onChange={onChange}
           ></MultilineInput>
           <View className="flex-row gap-2 mt-2">
             <InfoButton
