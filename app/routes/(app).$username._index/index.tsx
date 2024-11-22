@@ -14,9 +14,10 @@ import { RiChat4Icon } from "natmfat/icons/RiChat4Icon";
 import { RiTerminalBoxIcon } from "natmfat/icons/RiTerminalBoxIcon";
 import { prisma } from "~/.server/prisma";
 import { getStars } from "~/.server/prismaUtils";
+import { notFound } from "~/.server/routeUtils";
 
 export async function loader({ params }: LoaderFunctionArgs) {
-  Router.assertResponse(params.username, new Response(null, { status: 404 }));
+  Router.assertResponse(params.username, notFound());
   const user = await prisma.user.findFirst({
     where: { username: params.username },
     include: {
@@ -31,7 +32,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
       comments: true,
     },
   });
-  Router.assertResponse(user, new Response(null, { status: 404 }));
+  Router.assertResponse(user, notFound());
 
   return {
     user,

@@ -56,6 +56,7 @@ async function main() {
     prisma.post.create({
       data: {
         heading: "IDE from the future",
+        slug: "ide-from-the-future",
         body: "I've been really excited about Replit Desktop!",
         authorId: 1,
         thumbnailUrl: "",
@@ -65,6 +66,7 @@ async function main() {
     prisma.post.create({
       data: {
         heading: "Welcome to Yet Another Programming Community!",
+        slug: "welcome-to-yet-another-programming-community",
         body: "Idk what to write here, worry about it later",
         authorId: 1,
         thumbnailUrl: "",

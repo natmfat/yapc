@@ -42,9 +42,10 @@ export function Post({ user, post }: PostProps) {
             username={user.username}
           />
           <Text>
-            natmfat{" "}
+            {user.username}{" "}
             <span className="text-foreground-dimmer">
-              published an {post.type} <span className="px-1">•</span>{" "}
+              published an {post.type.toLocaleLowerCase()}{" "}
+              <span className="px-1">•</span>{" "}
               <Timestamp date={post.createdAt} className="align-top" />
             </span>
           </Text>

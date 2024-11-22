@@ -61,7 +61,7 @@ export function Profile({ user }: Pick<HeaderProps, "user">) {
 
         <Separator />
 
-        <ListItem className="px-4" asChild>
+        <ListItem className="px-4 rounded-b-default" asChild>
           <Link to="/logout">
             <RiLogoutBoxIcon />
             <Text>Logout</Text>

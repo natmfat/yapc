@@ -71,13 +71,15 @@ model Notification {
 }
 
 model Post {
-  id       Int   @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   author   User? @relation(fields: [authorId], references: [id])
   authorId Int?
 
   published Boolean @default(false)
 
   type         PostType
+  slug         String
   thumbnailUrl String
   heading      String   @db.VarChar(255)
   body         String?

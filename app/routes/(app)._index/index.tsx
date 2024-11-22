@@ -24,6 +24,8 @@ import {
 import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
 import { prisma } from "~/.server/prisma";
 
+export const ROUTE = "/";
+
 export const meta: MetaFunction = () => {
   return [
     { title: "New Remix App" },
