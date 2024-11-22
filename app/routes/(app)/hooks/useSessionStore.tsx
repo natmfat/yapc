@@ -2,6 +2,7 @@ import { User } from "@prisma/client";
 import { createContext, useContext, useRef } from "react";
 import { create, useStore } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import { Nullable } from "~/lib/types";
 
 interface StoreState {
   data: Nullable<User>;

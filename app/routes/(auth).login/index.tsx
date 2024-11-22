@@ -21,9 +21,9 @@ export default function LoginPage() {
       <Heading size="headerDefault">Log in to your account</Heading>
 
       <View className="gap-2" asChild>
-        <Form action={createRoute(UserProviderStrategy.FORM)}>
-          <Input placeholder="Email or username" />
-          <Input placeholder="Password" />
+        <Form action={createRoute(UserProviderStrategy.FORM)} method="POST">
+          <Input name="email" placeholder="Email" />
+          <Input name="password" placeholder="Password" type="password" />
           <Button color="primary">Log In</Button>
         </Form>
       </View>

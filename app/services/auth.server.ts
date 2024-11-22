@@ -27,15 +27,13 @@ authenticator.use(
     const { email, password } = await formStrategySchema.parseAsync(form);
 
     // find corresponding provider w/ details
-    const provider = await prisma.userProvider
-      .findFirstOrThrow({
-        select: { profilePassword: true, user: true },
-        where: {
-          strategy: UserProviderStrategy.FORM,
-          profileId: email,
-        },
-      })
-      .catch(() => null);
+    const provider = await prisma.userProvider.findFirst({
+      select: { profilePassword: true, user: true },
+      where: {
+        strategy: UserProviderStrategy.FORM,
+        profileId: email,
+      },
+    });
     Router.assertResponse(provider, "a user with this email does not exist");
 
     // provider does exist, check password & return user data

@@ -18,7 +18,7 @@ import { tokens } from "natmfat/lib/tokens";
 import { ListItem } from "~/components/ListItem";
 import { HeaderProps } from ".";
 
-export function Profile({ user }: Pick<HeaderProps, "user">) {
+export function Profile({ user }: { user: NonNullable<HeaderProps["user"]> }) {
   return (
     <Popover>
       <PopoverTrigger>
@@ -26,7 +26,7 @@ export function Profile({ user }: Pick<HeaderProps, "user">) {
           <View className="flex-row items-center gap-1.5 p-1 h-8 rounded-default">
             <Avatar
               size={tokens.space24}
-              src={user.avatar_url}
+              src={user.avatarUrl}
               username={user.username}
             />
             <RiArrowDownSIcon />
@@ -37,7 +37,7 @@ export function Profile({ user }: Pick<HeaderProps, "user">) {
         <View className="flex-row p-4 items-center gap-2">
           <Avatar
             size={tokens.space32}
-            src={user.avatar_url}
+            src={user.avatarUrl}
             username={user.username}
           />
           <Heading level={1} size="subheadDefault">

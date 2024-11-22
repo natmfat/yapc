@@ -22,7 +22,7 @@ export default function LoginPage() {
 
       <View className="gap-2" asChild>
         <Form action={createRoute(UserProviderStrategy.FORM)}>
-          <Input placeholder="Email or username" />
+          <Input placeholder="Email " />
           <Input placeholder="Password" />
           <Button color="primary">Create Account</Button>
         </Form>

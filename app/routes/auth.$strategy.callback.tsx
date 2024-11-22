@@ -1,20 +1,13 @@
-import { RemixLoader } from "remix-endpoint";
 import { authenticator } from "~/services/auth.server";
-
-import { z } from "zod";
+import { ROUTE as DASHBOARD_ROUTE } from "./(app)._index";
 import { ROUTE as LOGIN_ROUTE } from "./(auth).login";
-import { UserProviderStrategy } from "@prisma/client";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import { validateStrategy } from "./(auth)/lib/utils.server";
 
-export const loader = new RemixLoader()
-  .register({
-    validate: {
-      params: z.object({ strategy: z.nativeEnum(UserProviderStrategy) }),
-    },
-    handler: ({ params: { strategy }, context: { request } }) => {
-      return authenticator.authenticate(strategy, request, {
-        successRedirect: "/",
-        failureRedirect: LOGIN_ROUTE,
-      });
-    },
-  })
-  .create();
+export async function loader({ request, params }: LoaderFunctionArgs) {
+  const strategy = await validateStrategy(params.strategy);
+  return authenticator.authenticate(strategy, request, {
+    successRedirect: DASHBOARD_ROUTE,
+    failureRedirect: LOGIN_ROUTE,
+  });
+}
