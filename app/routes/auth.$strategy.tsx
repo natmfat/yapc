@@ -1,6 +1,6 @@
 import { redirect } from "@remix-run/node";
 import { RemixAction } from "remix-endpoint";
-import { UserProviderStrategy } from "~/.server/database/client";
+import { UserProviderStrategy } from "@prisma/client";
 import { authenticator } from "~/services/auth.server";
 import { z } from "zod";
 import { ROUTE as LOGIN_ROUTE } from "./login";

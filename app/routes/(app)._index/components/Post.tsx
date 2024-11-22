@@ -1,3 +1,4 @@
+import { Prisma, User } from "@prisma/client";
 import { Avatar } from "natmfat/components/Avatar";
 import { Button } from "natmfat/components/Button";
 import { Heading } from "natmfat/components/Heading";
@@ -12,12 +13,10 @@ import { RiEyeIcon } from "natmfat/icons/RiEyeIcon";
 import { RiShiningIcon } from "natmfat/icons/RiShiningIcon";
 import { tokens } from "natmfat/lib/tokens";
 import { ReactNode } from "react";
-import { PostData, UserData } from "~/.server/database/client";
-import { PostWithTagsData } from "~/routes/(app).$username";
 
 interface PostProps {
-  post: PostWithTagsData;
-  user: UserData;
+  post: Prisma.PostGetPayload<{ include: { tags: true; comments: true } }>;
+  user: User;
 }
 
 const MAX_TAGS = 3;
@@ -32,19 +31,19 @@ export function Post({ user, post }: PostProps) {
         <View className="flex-row gap-2">
           <Avatar
             size={tokens.space24}
-            src={user.avatar_url}
+            src={user.avatarUrl}
             username={user.username}
           />
           <Text>
             natmfat{" "}
             <span className="text-foreground-dimmer">
-              published an {post.update_type} <span className="px-1">•</span>{" "}
-              <Timestamp date={post.created_at} className="align-top" />
+              published an {post.type} <span className="px-1">•</span>{" "}
+              <Timestamp date={post.createdAt} className="align-top" />
             </span>
           </Text>
         </View>
         <Button className="w-20">
-          <RiShiningIcon /> {post.stat_stars}
+          <RiShiningIcon /> {post.stars}
         </Button>
       </View>
 
@@ -53,7 +52,7 @@ export function Post({ user, post }: PostProps) {
           <View className="flex-row gap-2">
             <img
               className="w-20 h-20 rounded-default border border-interactive"
-              src={post.thumbnail_url}
+              src={post.thumbnailUrl}
             />
             <View>
               <Heading size="subheadBig">{post.heading}</Heading>
@@ -63,9 +62,9 @@ export function Post({ user, post }: PostProps) {
 
           <View className="flex-row justify-between">
             <View className="flex-row">
-              <PostStat icon={<RiChat4Icon />} count={0} />
-              <PostStat icon={<RiShiningIcon />} count={post.stat_stars} />
-              <PostStat icon={<RiEyeIcon />} count={post.stat_views} />
+              <PostStat icon={<RiChat4Icon />} count={post.comments.length} />
+              <PostStat icon={<RiShiningIcon />} count={post.stars} />
+              <PostStat icon={<RiEyeIcon />} count={post.views} />
             </View>
             <Surface
               elevated

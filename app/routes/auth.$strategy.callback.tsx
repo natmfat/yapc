@@ -3,7 +3,7 @@ import { authenticator } from "~/services/auth.server";
 
 import { z } from "zod";
 import { ROUTE as LOGIN_ROUTE } from "./login";
-import { UserProviderStrategy } from "~/.server/database/client";
+import { UserProviderStrategy } from "@prisma/client";
 
 export const loader = new RemixLoader()
   .register({

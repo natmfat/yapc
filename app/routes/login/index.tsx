@@ -18,7 +18,7 @@ import { RiGamepadIcon } from "natmfat/icons/RiGamepadIcon";
 import { Feature } from "./components/Feature";
 import { Form } from "@remix-run/react";
 import { createRoute } from "../auth.$strategy";
-import { UserProviderStrategy } from "~/.server/database/client";
+import { UserProviderStrategy } from "@prisma/client";
 
 export const ROUTE = "/login";
 

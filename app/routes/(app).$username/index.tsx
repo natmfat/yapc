@@ -20,7 +20,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
   const user = await prisma.user.findFirst({
     where: { username: params.username },
     include: {
-      posts: true,
+      posts: {
+        include: { tags: true, comments: true },
+      },
       comments: true,
     },
   });
