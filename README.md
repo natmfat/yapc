@@ -5,7 +5,6 @@ Share your new side project or publish posts.
 Built with a series of "in-house" technologies that I maintain:
 
 - natmfat: closed course design system
-- [shitgen](https://github.com/natmfat/shitgen): a shit PostgreSQL type generator
 - [remix-endpoint](https://github.com/natmfat/remix-endpoint): validate Remix forms
 
 ## Development

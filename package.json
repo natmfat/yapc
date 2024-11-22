@@ -9,9 +9,10 @@
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "start": "remix-serve ./build/server/index.js",
     "typecheck": "tsc",
-    "db:seed": "",
-    "db:push": "",
-    "db:generate": ""
+    "db:seed": "tsx ./prisma/seed.ts",
+    "db:nuke": "prisma db push --force-reset && npx prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:generate": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",

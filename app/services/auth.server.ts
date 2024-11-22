@@ -1,9 +1,4 @@
 import { Authenticator } from "remix-auth";
-import {
-  shitgen,
-  UserData,
-  UserProviderStrategy,
-} from "~/.server/database/client";
 import { sessionStorage } from "~/services/session.server";
 import { FormStrategy } from "remix-auth-form";
 import { GitHubStrategy } from "remix-auth-github";
@@ -11,10 +6,12 @@ import invariant from "invariant";
 import { zfd } from "zod-form-data";
 import { Router } from "remix-endpoint";
 import bcrypt from "bcryptjs";
+import { prisma } from "~/.server/prisma";
+import { User, UserProviderStrategy } from "@prisma/client";
 
 // Create an instance of the authenticator, pass a generic with what
 // strategies will return and will store in the session
-export const authenticator = new Authenticator<UserData>(sessionStorage);
+export const authenticator = new Authenticator<User>(sessionStorage);
 
 invariant(process.env.GITHUB_CLIENT_ID, "expected github client id");
 invariant(process.env.GITHUB_CLIENT_SECRET, "expected github client secret");
@@ -30,22 +27,21 @@ authenticator.use(
     const { email, password } = await formStrategySchema.parseAsync(form);
 
     // find corresponding provider w/ details
-    const provider = await shitgen.userProvider.find({
-      select: ["profile_password"],
-      where: {
-        strategy: UserProviderStrategy.FORM,
-        profile_id: email,
-      },
-      include: {
-        user_id: true,
-      },
-    });
+    const provider = await prisma.userProvider
+      .findFirstOrThrow({
+        select: { profilePassword: true, user: true },
+        where: {
+          strategy: UserProviderStrategy.FORM,
+          profileId: email,
+        },
+      })
+      .catch(() => null);
     Router.assertResponse(provider, "a user with this email does not exist");
 
     // provider does exist, check password & return user data
-    const result = await bcrypt.compare(password, provider.profile_password);
+    const result = await bcrypt.compare(password, provider.profilePassword);
     Router.assertResponse(result, "incorrect password");
-    return provider.user_id;
+    return provider.user;
   }),
   UserProviderStrategy.FORM
 );
@@ -60,7 +56,7 @@ authenticator.use(
     async ({ profile, tokens, request, context }) => {
       // Get the user data from your DB or API using the tokens and profile
       // return shitgen.user.findOrCreate({ email: profile.emails[0].value });
-      return {} as UserData;
+      return {} as User;
     }
   ),
   UserProviderStrategy.GITHUB

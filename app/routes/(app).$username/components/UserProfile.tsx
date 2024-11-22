@@ -21,15 +21,14 @@ import { ListItem } from "~/components/ListItem";
 
 import { useUserStore } from "../../(app)/hooks/useUserStore";
 import { UserRole } from "./UserRole";
-import { UserData, RoleData } from "~/.server/database/client";
+import { User } from "@prisma/client";
 
 interface UserDetailsProps {
-  user: UserData;
-  roles: RoleData[];
-  stars?: number;
+  user: User;
+  stars: number;
 }
 
-export function UserProfile({ user, roles, stars = 0 }: UserDetailsProps) {
+export function UserProfile({ user, stars }: UserDetailsProps) {
   const userSession = useUserStore((state) => state.session);
   const owner = userSession && userSession.username === user.username;
 
@@ -41,7 +40,7 @@ export function UserProfile({ user, roles, stars = 0 }: UserDetailsProps) {
       <View className="-translate-y-16 relative p-4">
         <Avatar
           username={user.username}
-          src={user.avatar_url}
+          src={user.avatarUrl}
           size={spaceTokens.space96}
         />
         <View className="absolute flex-row items-center gap-2 top-16 right-0 pt-2 pr-4">
@@ -84,7 +83,7 @@ export function UserProfile({ user, roles, stars = 0 }: UserDetailsProps) {
           ) : null}
         </View>
         <Heading level={1} size="headerDefault" className="mt-2">
-          {user.first_name || user.username} {user.last_name}
+          {user.firstName || user.username} {user.lastName}
         </Heading>
         <Text color="dimmer">
           {user.username} ({stars})
@@ -93,8 +92,8 @@ export function UserProfile({ user, roles, stars = 0 }: UserDetailsProps) {
         <Text maxLines={2}>{user.bio}</Text>
 
         <View className="flex-row flex-wrap gap-2 mt-1">
-          {roles.map((role) => (
-            <UserRole role={role.name} key={role.name} />
+          {user.roles.map((role) => (
+            <UserRole role={role} key={role} />
           ))}
         </View>
       </View>

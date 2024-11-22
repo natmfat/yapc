@@ -22,7 +22,7 @@ import {
   FeaturedButton,
 } from "./components/Featured";
 import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
-import { shitgen } from "~/.server/database/client";
+import { prisma } from "~/.server/prisma";
 
 export const meta: MetaFunction = () => {
   return [
@@ -33,7 +33,7 @@ export const meta: MetaFunction = () => {
 
 export async function loader() {
   return {
-    tags: await shitgen.postTag.findMany({}),
+    tags: await prisma.tag.findMany(),
   };
 }
 
