@@ -21,7 +21,12 @@ export async function loader({ params }: LoaderFunctionArgs) {
     where: { username: params.username },
     include: {
       posts: {
-        include: { tags: true, comments: true },
+        include: {
+          tags: true,
+          _count: {
+            select: { comments: true },
+          },
+        },
       },
       comments: true,
     },

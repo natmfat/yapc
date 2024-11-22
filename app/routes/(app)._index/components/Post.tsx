@@ -15,7 +15,14 @@ import { tokens } from "natmfat/lib/tokens";
 import { ReactNode } from "react";
 
 interface PostProps {
-  post: Prisma.PostGetPayload<{ include: { tags: true; comments: true } }>;
+  post: Prisma.PostGetPayload<{
+    include: {
+      tags: true;
+      _count: {
+        select: { comments: true };
+      };
+    };
+  }>;
   user: User;
 }
 
@@ -62,7 +69,7 @@ export function Post({ user, post }: PostProps) {
 
           <View className="flex-row justify-between">
             <View className="flex-row">
-              <PostStat icon={<RiChat4Icon />} count={post.comments.length} />
+              <PostStat icon={<RiChat4Icon />} count={post._count.comments} />
               <PostStat icon={<RiShiningIcon />} count={post.stars} />
               <PostStat icon={<RiEyeIcon />} count={post.views} />
             </View>
