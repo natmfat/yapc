@@ -4,9 +4,10 @@ import { View } from "natmfat/components/View";
 import { UserProfile } from "./components/UserProfile";
 import { Router } from "remix-endpoint";
 import { prisma } from "~/.server/prisma";
-import { getStars, removeKeys } from "~/.server/prismaUtils";
+import { getStars } from "~/.server/prismaUtils";
 import { notFound } from "~/.server/routeUtils";
 import { UserStoreProvider } from "./hooks/useUserStore";
+import { omit } from "~/lib/utils";
 
 export async function loader({ params }: LoaderFunctionArgs) {
   Router.assertResponse(params.username, notFound());
@@ -27,7 +28,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   Router.assertResponse(user, notFound());
 
   return {
-    user: removeKeys(user, ["posts", "comments"]),
+    user: omit(user, ["posts", "comments"]),
     stars: getStars(user),
   };
 }

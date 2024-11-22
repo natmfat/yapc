@@ -88,7 +88,7 @@ export default function PostPage() {
       <View>{post.body}</View>
 
       <MarkdownInput placeholder="Add your comment here..." />
-      <Button color="primary" className="w-fit" disabled>
+      <Button color="primary" className="w-fit self-end" disabled>
         Comment
       </Button>
     </View>

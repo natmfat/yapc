@@ -15,9 +15,19 @@ import { Text } from "natmfat/components/Text";
 import { View } from "natmfat/components/View";
 import { RiImageIcon } from "natmfat/icons/RiImageIcon";
 import { RiMarkdownIcon } from "natmfat/icons/RiMarkdownIcon";
-import { ReactNode } from "react";
+import { ReactNode, useRef, useState } from "react";
+import { Markdown } from "./Markdown";
 
-export function MarkdownInput(props: MultilineInputProps) {
+export function MarkdownInput({
+  value: overrideValue,
+  defaultValue,
+  onChange,
+  ...props
+}: MultilineInputProps) {
+  const [localValue, setLocalValue] = useState(defaultValue);
+  const value = overrideValue || localValue;
+  const ref = useRef<HTMLTextAreaElement>(null);
+
   return (
     <Tabs defaultValue="write">
       <TabsList>
@@ -25,9 +35,16 @@ export function MarkdownInput(props: MultilineInputProps) {
         <TabsTrigger value="preview">Preview</TabsTrigger>
       </TabsList>
       <TabsContent value="write">
-        <View className="pt-2 gap-2">
-          <MultilineInput autoSize {...props}></MultilineInput>
-          <View className="flex-row gap-2">
+        <View className="block pt-2">
+          <MultilineInput
+            {...props}
+            autoSize
+            className="w-full"
+            ref={ref}
+            value={value}
+            onChange={onChange || ((e) => setLocalValue(e.target.value))}
+          ></MultilineInput>
+          <View className="flex-row gap-2 mt-2">
             <InfoButton
               icon={<RiMarkdownIcon />}
               text="Markdown is supported"
@@ -42,8 +59,20 @@ export function MarkdownInput(props: MultilineInputProps) {
         </View>
       </TabsContent>
       <TabsContent value="preview">
-        <View className="p-2 border border-transparent min-h-20">
-          <Text>Nothing to preview</Text>
+        <View
+          className="pt-2"
+          style={{
+            // magic number, default height of input + info buttons
+            minHeight: "98.4px",
+          }}
+        >
+          <View className="px-2 py-1 border border-transparent">
+            {value && String(value).length > 0 ? (
+              <Markdown body={String(value)} />
+            ) : (
+              <Text>Nothing to preview</Text>
+            )}
+          </View>
         </View>
       </TabsContent>
     </Tabs>

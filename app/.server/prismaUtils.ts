@@ -23,14 +23,6 @@ export function getStars(
   return stars;
 }
 
-export function removeKeys<T>(data: T, keys: Array<keyof T>) {
-  const dataClone = { ...data };
-  for (const key of keys) {
-    delete dataClone[key];
-  }
-  return dataClone;
-}
-
 // max url length is 2048 characters, this seems reasonable
 const MAX_SLUG_LENGTH = 1000;
 
