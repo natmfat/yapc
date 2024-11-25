@@ -23,6 +23,8 @@ import {
 } from "./components/Featured";
 import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
 import { prisma } from "~/.server/prisma";
+import { Post } from "./components/Post";
+import { useLoaderData } from "@remix-run/react";
 
 export const ROUTE = "/";
 
@@ -36,6 +38,13 @@ export const meta: MetaFunction = () => {
 export async function loader() {
   return {
     posts: await prisma.post.findMany({
+      include: {
+        tags: true,
+        author: true,
+        _count: {
+          select: { comments: true },
+        },
+      },
       orderBy: {
         createdAt: "desc",
       },
@@ -45,6 +54,8 @@ export async function loader() {
 }
 
 export default function Index() {
+  const { posts } = useLoaderData<typeof loader>();
+
   return (
     <>
       <Section>
@@ -135,7 +146,11 @@ export default function Index() {
               </Select>
             </View>
           </View>
-          <View className="mt-3"></View>
+          <View className="mt-3">
+            {posts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
+          </View>
         </View>
       </View>
     </>

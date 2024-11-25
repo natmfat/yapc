@@ -1,5 +1,6 @@
 import { Prisma, User } from "@prisma/client";
 import { Link } from "@remix-run/react";
+import invariant from "invariant";
 import { Avatar } from "natmfat/components/Avatar";
 import { Button } from "natmfat/components/Button";
 import { Heading } from "natmfat/components/Heading";
@@ -21,17 +22,19 @@ interface PostProps {
   post: Prisma.PostGetPayload<{
     include: {
       tags: true;
+      author: true;
       _count: {
         select: { comments: true };
       };
     };
   }>;
-  user: User;
 }
 
 const MAX_TAGS = 3;
 
-export function Post({ user, post }: PostProps) {
+export function Post({ post }: PostProps) {
+  invariant(post.author, "expected user to exist");
+
   const tags = post.tags.slice(0, MAX_TAGS);
   const remainingTags = tags.length - MAX_TAGS;
 
@@ -39,7 +42,7 @@ export function Post({ user, post }: PostProps) {
     <View className="py-3 gap-2">
       <View className="flex-row items-center justify-between">
         <View className="flex-row gap-1 items-center">
-          <Author user={user} />
+          <Author user={post.author} />
           <span className="text-foreground-dimmer flex flex-row items-center gap-1">
             published an {post.type.toLocaleLowerCase()}
             <span>•</span>
@@ -51,7 +54,7 @@ export function Post({ user, post }: PostProps) {
         </Button>
       </View>
 
-      <Link to={createRoute(user.username, post.slug)}>
+      <Link to={createRoute(post.author.username, post.slug)}>
         <Interactive className="p-2">
           <View className="gap-2">
             <View className="flex-row gap-2">

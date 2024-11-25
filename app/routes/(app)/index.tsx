@@ -4,7 +4,6 @@ import { Header } from "./components/Header";
 import { authenticator } from "~/services/auth.server";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { SessionStoreProvider } from "./hooks/useSessionStore";
-import { Button } from "natmfat/components/Button";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const session = await authenticator.isAuthenticated(request);
