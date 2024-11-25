@@ -9,6 +9,7 @@ import { Logo } from "./Logo";
 import { User } from "@prisma/client";
 import { Button } from "natmfat/components/Button";
 import { Nullable } from "~/lib/types";
+import { ROUTE as LOGIN_ROUTE } from "~/routes/(auth).login";
 
 export interface HeaderProps {
   user: Nullable<Pick<User, "username" | "avatarUrl">>;
@@ -30,7 +31,9 @@ export function Header({ user }: HeaderProps) {
             <Profile user={user} />
           </>
         ) : (
-          <Button>Log in</Button>
+          <Button asChild>
+            <Link to={LOGIN_ROUTE}>Log in</Link>
+          </Button>
         )}
       </View>
     </header>

@@ -25,7 +25,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body data-theme="dark">
         <ThemeProvider value="dark">{children}</ThemeProvider>
-
         <ScrollRestoration />
         <Scripts />
       </body>
