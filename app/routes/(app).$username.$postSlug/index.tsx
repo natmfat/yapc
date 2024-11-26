@@ -161,6 +161,12 @@ export async function loader({
 
   Router.assertResponse(post, notFound());
 
+  // add view (maybe in the future save this like stars, which would allow a "history" tab)
+  await prisma.post.update({
+    where: { id: post.id },
+    data: { views: { increment: 1 } },
+  });
+
   return { post };
 }
 
@@ -170,8 +176,6 @@ export function createRoute(username: string, postSlug: string) {
 
 export default function PostPage() {
   const { post } = useLoaderData<typeof loader>();
-
-  const [comment, setComment] = useState("");
 
   const route = createRoute(post.author.username, post.slug);
   const { addToast } = useToastContext();
