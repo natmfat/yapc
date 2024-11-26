@@ -14,6 +14,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.1.0
         version: 1.1.0(@types/react@18.3.12)(react@18.3.1)
+      '@radix-ui/react-visually-hidden':
+        specifier: ^1.1.0
+        version: 1.1.0(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@remix-run/node':
         specifier: ^2.14.0
         version: 2.14.0(typescript@5.6.3)
@@ -39,8 +42,8 @@ importers:
         specifier: ^4.1.0
         version: 4.4.0
       natmfat:
-        specifier: ^0.0.13
-        version: 0.0.13(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: ^0.0.18
+        version: 0.0.18(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -3424,8 +3427,8 @@ packages:
     engines: {node: ^18 || >=20}
     hasBin: true
 
-  natmfat@0.0.13:
-    resolution: {integrity: sha512-CtrPZ6ywdVMtIldjObIvmYTqyMeFi31YV6YG5pqqvzSOXmpeCyWwHgM54ip4WbEZ9h4heMfgGPTfaZb/hXmaCw==}
+  natmfat@0.0.18:
+    resolution: {integrity: sha512-dpG2YexLwvMsbgj4+1+9zfhhjVtvLzKc3jbu8zA8S67hu3sqvvtlQPO4/zkKv9MgiFFs69EjHv/t5L8C/Q6u1A==}
     peerDependencies:
       react: ^18.2.0
       react-dom: ^18.2.0
@@ -8648,7 +8651,7 @@ snapshots:
 
   nanoid@5.0.8: {}
 
-  natmfat@0.0.13(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  natmfat@0.0.18(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@radix-ui/react-accordion': 1.2.1(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@radix-ui/react-alert-dialog': 1.1.2(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)

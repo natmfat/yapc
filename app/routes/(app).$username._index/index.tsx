@@ -41,10 +41,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function PortfoliosPage() {
   const { posts, comments } = useLoaderData<typeof loader>();
   const user = useUserStore((state) => state.data);
-  invariant(user, "Expected user to exist");
 
   return (
-    <Tabs defaultValue="posts" className="w-full">
+    <Tabs defaultValue="posts" className="w-full gap-0">
       <TabsList>
         <TabsTrigger value="posts">
           <RiTerminalBoxIcon />
@@ -52,14 +51,22 @@ export default function PortfoliosPage() {
         </TabsTrigger>
         <TabsTrigger value="replies">
           <RiChat4Icon />
-          Comments
+          Replies
         </TabsTrigger>
       </TabsList>
       <TabsContent value="posts">
         {posts.map((post) => (
-          <Post key={post.id} post={post} user={user} />
+          <Post
+            key={post.id}
+            post={{
+              ...post,
+              author: user,
+              authorId: user?.id || 0,
+            }}
+          />
         ))}
       </TabsContent>
+      <TabsContent value="replies">Replies</TabsContent>
     </Tabs>
   );
 }

@@ -18,6 +18,7 @@ import { RiSquareIcon } from "natmfat/icons/RiSquareIcon";
 import { spaceTokens, tokens } from "natmfat/lib/tokens";
 import { CopyIconButton } from "~/components/CopyIconButton";
 import { ListItem } from "~/components/ListItem";
+import { ClientOnly } from "remix-utils/client-only";
 
 import { useSessionStore } from "../../(app)/hooks/useSessionStore";
 import { UserRole } from "./UserRole";
@@ -25,6 +26,10 @@ import { User } from "@prisma/client";
 import { RiAddIcon } from "natmfat/icons/RiAddIcon";
 import { RiCalendarIcon } from "natmfat/icons/RiCalendarIcon";
 import { Timestamp } from "natmfat/components/Timestamp";
+import { useToastContext } from "natmfat/components/Toast";
+import { copyToClipboard } from "natmfat/lib/copyToClipboard";
+import { createRoute } from "..";
+import { useCallback } from "react";
 
 interface UserDetailsProps {
   user: User;
@@ -33,7 +38,19 @@ interface UserDetailsProps {
 
 export function UserProfile({ user, stars }: UserDetailsProps) {
   const userSession = useSessionStore((state) => state.data);
+  const { addToast } = useToastContext();
+
   const owner = userSession && userSession.username === user.username;
+
+  const copyLinkToProfile = useCallback(() => {
+    copyToClipboard(
+      new URL(createRoute(user.username), location.href).toString()
+    );
+    addToast({
+      type: "success",
+      message: "Copied to clipboard",
+    });
+  }, [addToast]);
 
   return (
     <View className="overflow-x-hidden flex-shrink-0 w-4/12">
@@ -58,7 +75,7 @@ export function UserProfile({ user, stars }: UserDetailsProps) {
               </IconButton>
             </PopoverTrigger>
             <PopoverContent className="px-0 py-1.5">
-              <ListItem>
+              <ListItem onClick={copyLinkToProfile}>
                 <RiLinkIcon />
                 Copy link to profile
               </ListItem>

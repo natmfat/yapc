@@ -11,6 +11,7 @@ import { fonts } from "natmfat/integrations/remix";
 import "./tailwind.css";
 import "natmfat/styles/core.css";
 import { ThemeProvider } from "natmfat/components/ThemeProvider";
+import { ToastProvider } from "natmfat/components/Toast";
 
 export const links: LinksFunction = () => [...(fonts as LinkDescriptor[])];
 
@@ -24,7 +25,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body data-theme="dark">
-        <ThemeProvider value="dark">{children}</ThemeProvider>
+        <ThemeProvider value="dark">
+          <ToastProvider>{children}</ToastProvider>
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
       </body>

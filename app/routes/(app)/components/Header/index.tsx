@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react";
 import { IconButton } from "natmfat/components/IconButton";
-import { Text } from "natmfat/components/Text";
 import { View } from "natmfat/components/View";
 import { Notifications } from "./Notifications";
 import { Profile } from "./Profile";
@@ -22,10 +21,8 @@ export function Header({ user }: HeaderProps) {
       <View className="flex-row items-center">
         {user ? (
           <>
-            <IconButton alt="Create Portfolio" className="h-8 w-8" asChild>
-              <Link to={"/"}>
-                <RiAddIcon />
-              </Link>
+            <IconButton alt="Create post" className="h-8 w-8">
+              <RiAddIcon />
             </IconButton>
             <Notifications />
             <Profile user={user} />

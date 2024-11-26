@@ -18,7 +18,7 @@ import { ReactNode } from "react";
 import { createRoute } from "~/routes/(app).$username.$postSlug";
 import { Author } from "~/routes/(app)/components/Author";
 
-interface PostProps {
+export interface PostProps {
   post: Prisma.PostGetPayload<{
     include: {
       tags: true;
@@ -30,7 +30,7 @@ interface PostProps {
   }>;
 }
 
-const MAX_TAGS = 3;
+export const MAX_TAGS = 3;
 
 export function Post({ post }: PostProps) {
   invariant(post.author, "expected user to exist");
@@ -96,9 +96,9 @@ export function Post({ post }: PostProps) {
 }
 
 // @todo format count from number -> human readable string
-function PostStat({ icon, count }: { icon: ReactNode; count: number }) {
+export function PostStat({ icon, count }: { icon: ReactNode; count: number }) {
   return (
-    <View className="w-16">
+    <View className="w-12">
       <Text className="flex flex-row items-center gap-1" color="dimmer">
         {icon}
         {count}

@@ -9,6 +9,10 @@ import { notFound } from "~/.server/routeUtils";
 import { UserStoreProvider } from "./hooks/useUserStore";
 import { omit } from "~/lib/utils";
 
+export function createRoute(username: string) {
+  return `/${username}`;
+}
+
 export async function loader({ params }: LoaderFunctionArgs) {
   Router.assertResponse(params.username, notFound());
   const user = await prisma.user.findFirst({

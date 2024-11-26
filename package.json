@@ -17,6 +17,7 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@radix-ui/react-slot": "^1.1.0",
+    "@radix-ui/react-visually-hidden": "^1.1.0",
     "@remix-run/node": "^2.14.0",
     "@remix-run/react": "^2.14.0",
     "@remix-run/serve": "^2.14.0",
@@ -25,7 +26,7 @@
     "immer": "^10.1.1",
     "invariant": "^2.2.4",
     "isbot": "^4.1.0",
-    "natmfat": "^0.0.13",
+    "natmfat": "^0.0.18",
     "react": "^18.2.0",
     "react-code-blocks": "^0.1.6",
     "react-dom": "^18.2.0",
