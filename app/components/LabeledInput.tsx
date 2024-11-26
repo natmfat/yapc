@@ -87,7 +87,7 @@ LabeledInput.displayName = "LabeledInput";
  * @param maxLength Threshold for text length
  * @returns A class name that applies a color
  */
-function getColor(length: number, maxLength: number) {
+export function getColor(length: number, maxLength: number) {
   if (length > maxLength) {
     return "text-negative-default";
   } else if (length > maxLength - maxLength / 10) {

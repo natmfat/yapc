@@ -10,6 +10,7 @@ import { Text } from "natmfat/components/Text";
 import { Timestamp } from "natmfat/components/Timestamp";
 import { View } from "natmfat/components/View";
 import { RiChat4Icon } from "natmfat/icons/RiChat4Icon";
+import { RiErrorWarningIcon } from "natmfat/icons/RiErrorWarningIcon";
 import { RiEyeIcon } from "natmfat/icons/RiEyeIcon";
 import { RiShiningIcon } from "natmfat/icons/RiShiningIcon";
 import { ReactNode } from "react";
@@ -56,39 +57,42 @@ export function Post({ post }: PostProps) {
         <Interactive className="p-2">
           <View className="gap-2">
             <View className="flex-row gap-2">
-              <img
-                className="w-20 h-20 rounded-default border border-interactive"
-                src={post.thumbnailUrl}
-              />
+              <View className="w-20 aspect-square grid place-items-center border border-interactive rounded-default overflow-hidden flex-0">
+                {post.thumbnailUrl ? (
+                  <img className="w-full h-full" src={post.thumbnailUrl} />
+                ) : (
+                  <RiErrorWarningIcon />
+                )}
+              </View>
               <View>
                 <Heading size="subheadBig">{post.heading}</Heading>
                 <Text>{post.body}</Text>
               </View>
             </View>
-
-            <View className="flex-row justify-between">
-              <View className="flex-row">
-                <PostStat icon={<RiChat4Icon />} count={post._count.comments} />
-                <PostStat icon={<RiShiningIcon />} count={post._count.stars} />
-                <PostStat icon={<RiEyeIcon />} count={post.views} />
-              </View>
-              <Surface
-                elevated
-                className="bg-transparent flex-row items-center gap-1"
-              >
-                {post.tags.map((tag) => (
-                  <Pill key={tag.name}>#{tag.name}</Pill>
-                ))}
-                {remainingTags > 0 ? (
-                  <Text size="small" color="dimmer">
-                    +{remainingTags}
-                  </Text>
-                ) : null}
-              </Surface>
-            </View>
           </View>
         </Interactive>
       </Link>
+
+      <View className="flex-row justify-between items-center">
+        <View className="flex-row">
+          <PostStat icon={<RiChat4Icon />} count={post._count.comments} />
+          <PostStat icon={<RiShiningIcon />} count={post._count.stars} />
+          <PostStat icon={<RiEyeIcon />} count={post.views} />
+        </View>
+        <Surface
+          elevated
+          className="bg-transparent flex-row items-center gap-1 h-7"
+        >
+          {post.tags.map((tag) => (
+            <Pill key={tag.name}>#{tag.name}</Pill>
+          ))}
+          {remainingTags > 0 ? (
+            <Text size="small" color="dimmer">
+              +{remainingTags}
+            </Text>
+          ) : null}
+        </Surface>
+      </View>
     </View>
   );
 }

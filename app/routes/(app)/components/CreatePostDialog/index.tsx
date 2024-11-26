@@ -7,15 +7,11 @@ import {
 } from "natmfat/components/Dialog";
 import {
   ChangeEvent,
-  Component,
   ComponentProps,
   ComponentPropsWithoutRef,
   createContext,
-  Dispatch,
-  ElementRef,
   forwardRef,
   Fragment,
-  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -37,18 +33,16 @@ import {
   TabsSeparator,
   TabsTrigger,
 } from "natmfat/components/Tabs";
-import { Input, InputProps } from "natmfat/components/Input";
 import { MultilineInput } from "natmfat/components/MultilineInput";
 import { Button } from "natmfat/components/Button";
 import { RiArrowRightIcon } from "natmfat/icons/RiArrowRightIcon";
-import { LabeledInput } from "~/components/LabeledInput";
+import { getColor, LabeledInput } from "~/components/LabeledInput";
 import { PostSkeleton } from "./PostSkeleton";
 import { RiImageIcon } from "natmfat/icons/RiImageIcon";
 import { RiArrowLeftIcon } from "natmfat/icons/RiArrowLeftIcon";
 import { RiUploadIcon } from "natmfat/icons/RiUploadIcon";
 import { tokens } from "natmfat/lib/tokens";
 import { RiAddIcon } from "natmfat/icons/RiAddIcon";
-import { Pill } from "natmfat/components/Pill";
 import { RiCloseIcon } from "natmfat/icons/RiCloseIcon";
 import { cn } from "natmfat/lib/cn";
 import { mergeRefs } from "natmfat/lib/mergeRefs";
@@ -67,22 +61,32 @@ export const PostDialogProvider = Context.Provider;
 
 export const usePostDialogContext = () => useContext(Context);
 
-const tabs = ["basics", "tags", "icon", "cover_page"] as const;
+const TABS = ["basics", "tags", "icon", "cover_page"] as const;
+const MAX_TAGS = 5;
 
-type TabValue = (typeof tabs)[number];
+const DEFAULT_PROJECT_HEADING = "My first website";
+const DEFAULT_PROJECT_BODY = "Say hello to the world!";
+
+type TabValue = (typeof TABS)[number];
 
 export function PostDialog() {
   const session = useSessionStore((store) => store.data);
+  invariant(session, "Expected user session to exist");
+
   const { open, setOpen } = usePostDialogContext();
+
+  // handle navigation between panels
   const [tab, setTab] = useState<TabValue>("basics");
+
+  // basics tab
+  const [heading, setHeading] = useState("");
+  const [body, setBody] = useState("");
+
+  // tags tab
   const [tags, setTags] = useState<string[]>([]);
   const [tagValue, setTagValue] = useState("");
 
-  const index = tabs.indexOf(tab);
-
-  if (!session) {
-    return null;
-  }
+  const index = TABS.indexOf(tab);
 
   return (
     <Dialog maxWidth={"1000px"} open={open} onOpenChange={setOpen}>
@@ -105,10 +109,11 @@ export function PostDialog() {
               className="h-full flex-1"
             >
               <TabsList>
-                {tabs.map((tab, i) => (
+                {/* Render list of tab triggers from the TABS array, allows you to easily create new tabs */}
+                {TABS.map((tab, i) => (
                   <Fragment key={tab}>
                     <TabsTrigger value={tab}>{formatTabTitle(tab)}</TabsTrigger>
-                    {i !== tabs.length - 1 ? <TabsSeparator /> : null}
+                    {i !== TABS.length - 1 ? <TabsSeparator /> : null}
                   </Fragment>
                 ))}
               </TabsList>
@@ -117,19 +122,32 @@ export function PostDialog() {
                   label="Project name"
                   name="heading"
                   maxLength={60}
-                  placeholder="My first website"
+                  placeholder={DEFAULT_PROJECT_HEADING}
+                  value={heading}
+                  onChange={(e) => setHeading(e.target.value)}
                 />
                 <LabeledInput
                   label="Project description"
                   name="body"
                   maxLength={600}
+                  placeholder={DEFAULT_PROJECT_BODY}
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
                   asChild
                 >
-                  <MultilineInput placeholder="Say hello to the world!" />
+                  <MultilineInput />
                 </LabeledInput>
               </TabsContent>
               <TabsContent value="tags">
-                <Text>Adding tags helps others find your project.</Text>
+                <View className="flex-row justify-between items-center">
+                  <Text>Tags help others find your project.</Text>
+                  <Text
+                    color="dimmest"
+                    className={cn(getColor(tags.length, MAX_TAGS))}
+                  >
+                    {tags.length}/{MAX_TAGS}
+                  </Text>
+                </View>
                 <View className="flex-row flex-wrap gap-2">
                   {tags.map((tag) => (
                     <Tag
@@ -189,24 +207,24 @@ export function PostDialog() {
                 <Button
                   className="self-start"
                   type="button"
-                  onClick={() => setTab(tabs[index - 1])}
+                  onClick={() => setTab(TABS[index - 1])}
                 >
                   <RiArrowLeftIcon /> Back
                 </Button>
               ) : null}
 
-              {index < tabs.length - 1 ? (
+              {index < TABS.length - 1 ? (
                 <Button
                   color="primary"
                   className="justify-self-end ml-auto"
                   type="button"
-                  onClick={() => setTab(tabs[index + 1])}
+                  onClick={() => setTab(TABS[index + 1])}
                 >
                   Next <RiArrowRightIcon />
                 </Button>
               ) : null}
 
-              {index === tabs.length - 1 ? (
+              {index === TABS.length - 1 ? (
                 <Button
                   color="primary"
                   className="justify-self-end ml-auto border border-primary-stronger"
@@ -232,10 +250,10 @@ export function PostDialog() {
               <PostPreview
                 author={session}
                 type={PostType.PROJECT}
-                tags={[]}
+                tags={tags}
                 thumbnailUrl=""
-                heading="Welcome to Yet Another Programming Community!"
-                body="Idk what to write here, worry about it later"
+                heading={heading || DEFAULT_PROJECT_HEADING}
+                body={body || DEFAULT_PROJECT_BODY}
               />
               <PostSkeleton variant="top" />
             </View>
@@ -299,14 +317,14 @@ const TagInput = forwardRef<
   }, [props.value]);
 
   return (
-    <View className="flex-row gap-1 border border-interactive-active rounded-full focus-within:border-interactive-active w-fit items-center h-7 pl-2 pr-3">
+    <View className="flex-row gap-1 border border-interactive focus-within:shadow-focus transition-shadow duration-snappy rounded-full w-fit items-center h-7 pl-2 pr-3">
       <RiAddIcon />
       <input
         className={cn(
           "border-none outline-none text-small bg-transparent placeholder:text-foreground-dimmest px-0",
           className
         )}
-        maxLength={60}
+        maxLength={40}
         onChange={onChange}
         ref={mergeRefs(ref, inputRef)}
         placeholder="Add a tag"
@@ -323,8 +341,6 @@ function TabsContent({
 }: Omit<ComponentProps<typeof TabsContentRoot>, "value" | "asChild"> & {
   value: TabValue;
 }) {
-  const index = tabs.indexOf(value);
-
   return (
     <TabsContentRoot value={value} asChild {...props}>
       <View className="gap-4 h-full flex-1 relative">{children}</View>

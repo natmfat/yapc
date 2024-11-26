@@ -27,6 +27,8 @@ export function PostPreview({
   const displayTags = tags.slice(0, MAX_TAGS);
   const remainingTags = tags.length - MAX_TAGS;
 
+  // @todo somehow share code w/ Post component, this duplication is annoying
+
   return (
     <View className="py-3 gap-2">
       <View className="flex-row items-center justify-between">
@@ -41,7 +43,7 @@ export function PostPreview({
 
       <View className="gap-2 p-2 border border-interactive rounded-default">
         <View className="flex-row gap-2">
-          <View className="w-20 aspect-square grid place-items-center border border-interactive rounded-default overflow-hidden flex-0 bg-interactive">
+          <View className="w-20 aspect-square grid place-items-center border border-interactive rounded-default overflow-hidden flex-0">
             {thumbnailUrl ? (
               <img className="w-full h-full" src={thumbnailUrl} />
             ) : (
@@ -54,27 +56,27 @@ export function PostPreview({
             <Text>{body}</Text>
           </View>
         </View>
+      </View>
 
-        <View className="flex-row justify-between">
-          <View className="flex-row">
-            <PostStat icon={<RiChat4Icon />} count={0} />
-            <PostStat icon={<RiShiningIcon />} count={0} />
-            <PostStat icon={<RiEyeIcon />} count={0} />
-          </View>
-          <Surface
-            elevated
-            className="bg-transparent flex-row items-center gap-1"
-          >
-            {displayTags.map((tag) => (
-              <Pill key={tag}>#{tag}</Pill>
-            ))}
-            {remainingTags > 0 ? (
-              <Text size="small" color="dimmer">
-                +{remainingTags}
-              </Text>
-            ) : null}
-          </Surface>
+      <View className="flex-row justify-between items-center">
+        <View className="flex-row">
+          <PostStat icon={<RiChat4Icon />} count={0} />
+          <PostStat icon={<RiShiningIcon />} count={0} />
+          <PostStat icon={<RiEyeIcon />} count={0} />
         </View>
+        <Surface
+          elevated
+          className="bg-transparent flex-row items-center gap-1 h-7 pointer-events-none select-none"
+        >
+          {displayTags.map((tag) => (
+            <Pill key={tag}>#{tag}</Pill>
+          ))}
+          {remainingTags > 0 ? (
+            <Text size="small" color="dimmer">
+              +{remainingTags}
+            </Text>
+          ) : null}
+        </Surface>
       </View>
     </View>
   );

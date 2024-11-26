@@ -57,15 +57,15 @@ export function PostSkeleton({ variant }: PostSkeletonProps) {
               />
             </View>
           </View>
-
-          <View className="flex-row justify-between">
-            <View className="flex-row gap-1">
-              <Surface elevated className="w-10 h-5 rounded-default" />
-              <Surface elevated className="w-10 h-5 rounded-default" />
-              <Surface elevated className="w-10 h-5 rounded-default" />
-            </View>
-          </View>
         </Surface>
+
+        <View className="flex-row justify-between">
+          <View className="flex-row gap-1">
+            <Surface elevated className="w-10 h-5 rounded-default" />
+            <Surface elevated className="w-10 h-5 rounded-default" />
+            <Surface elevated className="w-10 h-5 rounded-default" />
+          </View>
+        </View>
       </View>
     </View>
   );

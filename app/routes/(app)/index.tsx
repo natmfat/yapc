@@ -31,7 +31,7 @@ export default function AppLayout() {
             <Outlet />
           </View>
 
-          <PostDialog />
+          {session ? <PostDialog /> : null}
 
           <footer className="h-20"></footer>
         </View>
