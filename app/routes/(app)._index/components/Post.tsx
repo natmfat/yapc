@@ -14,6 +14,7 @@ import { RiErrorWarningIcon } from "natmfat/icons/RiErrorWarningIcon";
 import { RiEyeIcon } from "natmfat/icons/RiEyeIcon";
 import { RiShiningIcon } from "natmfat/icons/RiShiningIcon";
 import { ReactNode } from "react";
+import { Image } from "~/components/Image";
 import { createRoute } from "~/routes/(app).$username.$postSlug";
 import { Author } from "~/routes/(app)/components/Author";
 
@@ -57,13 +58,11 @@ export function Post({ post }: PostProps) {
         <Interactive className="p-2">
           <View className="gap-2">
             <View className="flex-row gap-2">
-              <View className="w-20 aspect-square grid place-items-center border border-interactive rounded-default overflow-hidden flex-0">
-                {post.thumbnailUrl ? (
-                  <img className="w-full h-full" src={post.thumbnailUrl} />
-                ) : (
-                  <RiErrorWarningIcon />
-                )}
-              </View>
+              <Image
+                src={post.thumbnailUrl}
+                className="w-20 aspect-square"
+                concise
+              />
               <View>
                 <Heading size="subheadBig">{post.heading}</Heading>
                 <Text>{post.body}</Text>

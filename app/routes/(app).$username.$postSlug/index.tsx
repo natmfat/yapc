@@ -22,6 +22,7 @@ import {
   TabsTrigger,
 } from "natmfat/components/Tabs";
 import { MarkdownInput } from "./components/MarkdownInput";
+import { Image } from "~/components/Image";
 
 export async function loader({
   params: { username, postSlug },
@@ -58,10 +59,7 @@ export default function PostPage() {
   const { post } = useLoaderData<typeof loader>();
   return (
     <View className="gap-2">
-      <img
-        src={post.thumbnailUrl}
-        className="w-full aspect-[12/5] rounded-default border border-interactive"
-      />
+      <Image src={post.thumbnailUrl} className="w-full aspect-[12/5]" />
 
       <View className="flex-row gap-2 justify-between">
         <Heading size="headerDefault" className="flex-1">

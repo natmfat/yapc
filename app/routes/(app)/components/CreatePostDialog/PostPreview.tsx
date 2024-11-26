@@ -10,6 +10,7 @@ import { Pill } from "natmfat/components/Pill";
 import { RiChat4Icon } from "natmfat/icons/RiChat4Icon";
 import { RiEyeIcon } from "natmfat/icons/RiEyeIcon";
 import { RiErrorWarningIcon } from "natmfat/icons/RiErrorWarningIcon";
+import { Image } from "~/components/Image";
 
 export function PostPreview({
   author,
@@ -43,14 +44,7 @@ export function PostPreview({
 
       <View className="gap-2 p-2 border border-interactive rounded-default">
         <View className="flex-row gap-2">
-          <View className="w-20 aspect-square grid place-items-center border border-interactive rounded-default overflow-hidden flex-0">
-            {thumbnailUrl ? (
-              <img className="w-full h-full" src={thumbnailUrl} />
-            ) : (
-              <RiErrorWarningIcon />
-            )}
-          </View>
-
+          <Image className="w-20 aspect-square" src={thumbnailUrl} concise />
           <View className="flex-1 w-full overflow-hidden">
             <Heading size="subheadBig">{heading}</Heading>
             <Text>{body}</Text>
