@@ -25,6 +25,7 @@ import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
 import { prisma } from "~/.server/prisma";
 import { Post } from "./components/Post";
 import { useLoaderData } from "@remix-run/react";
+import { usePostDialogContext } from "../(app)/components/CreatePostDialog";
 
 export const ROUTE = "/";
 
@@ -55,13 +56,14 @@ export async function loader() {
 
 export default function Index() {
   const { posts } = useLoaderData<typeof loader>();
+  const { setOpen } = usePostDialogContext();
 
   return (
     <>
       <Section>
         <View className="flex-row justify-between items-center">
           <Heading>Community</Heading>
-          <Button color="primary">
+          <Button color="primary" onClick={() => setOpen(true)}>
             <RiUploadIcon />
             Publish a Project
           </Button>

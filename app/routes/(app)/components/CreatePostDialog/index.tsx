@@ -73,14 +73,19 @@ type TabValue = (typeof tabs)[number];
 
 export function PostDialog() {
   const session = useSessionStore((store) => store.data);
-  invariant(session, "expected session to exist");
-
-  const [tab, setTab] = useState<TabValue>("tags");
+  const { open, setOpen } = usePostDialogContext();
+  const [tab, setTab] = useState<TabValue>("basics");
   const [tags, setTags] = useState<string[]>([]);
   const [tagValue, setTagValue] = useState("");
 
+  const index = tabs.indexOf(tab);
+
+  if (!session) {
+    return null;
+  }
+
   return (
-    <Dialog maxWidth={"1000px"} defaultOpen>
+    <Dialog maxWidth={"1000px"} open={open} onOpenChange={setOpen}>
       <DialogContent className="p-0">
         {/* @audit-ok we want to add our own styling */}
         <VisuallyHidden>
@@ -90,7 +95,7 @@ export function PostDialog() {
           </DialogDescription>
         </VisuallyHidden>
         <View className="flex-row">
-          <Surface elevated className="w-1/3 p-4 gap-2">
+          <Surface elevated className="w-1/3 p-4 gap-2 relative">
             <Heading size="headerDefault">Publish your Project</Heading>
 
             <Tabs
@@ -107,11 +112,12 @@ export function PostDialog() {
                   </Fragment>
                 ))}
               </TabsList>
-              <TabsContent value="basics" setTab={setTab}>
+              <TabsContent value="basics">
                 <LabeledInput
                   label="Project name"
                   name="heading"
                   maxLength={60}
+                  placeholder="My first website"
                 />
                 <LabeledInput
                   label="Project description"
@@ -119,13 +125,22 @@ export function PostDialog() {
                   maxLength={600}
                   asChild
                 >
-                  <MultilineInput />
+                  <MultilineInput placeholder="Say hello to the world!" />
                 </LabeledInput>
               </TabsContent>
-              <TabsContent value="tags" setTab={setTab}>
+              <TabsContent value="tags">
+                <Text>Adding tags helps others find your project.</Text>
                 <View className="flex-row flex-wrap gap-2">
                   {tags.map((tag) => (
-                    <Tag key={tag} name={tag} onClose={() => {}} />
+                    <Tag
+                      key={tag}
+                      name={tag}
+                      onClose={() => {
+                        setTags((prevTags) =>
+                          prevTags.filter((currentTag) => currentTag !== tag)
+                        );
+                      }}
+                    />
                   ))}
                   <TagInput
                     value={tagValue}
@@ -153,13 +168,13 @@ export function PostDialog() {
                   />
                 </View>
               </TabsContent>
-              <TabsContent value="icon" setTab={setTab}>
+              <TabsContent value="icon">
                 <Button>
                   <RiImageIcon />
                   Upload an icon
                 </Button>
               </TabsContent>
-              <TabsContent value="cover_page" setTab={setTab}>
+              <TabsContent value="cover_page">
                 <View>
                   <Button>
                     <RiImageIcon />
@@ -168,6 +183,43 @@ export function PostDialog() {
                 </View>
               </TabsContent>
             </Tabs>
+
+            <View className="flex-row absolute left-0 bottom-0 w-full p-4">
+              {index > 0 ? (
+                <Button
+                  className="self-start"
+                  type="button"
+                  onClick={() => setTab(tabs[index - 1])}
+                >
+                  <RiArrowLeftIcon /> Back
+                </Button>
+              ) : null}
+
+              {index < tabs.length - 1 ? (
+                <Button
+                  color="primary"
+                  className="justify-self-end ml-auto"
+                  type="button"
+                  onClick={() => setTab(tabs[index + 1])}
+                >
+                  Next <RiArrowRightIcon />
+                </Button>
+              ) : null}
+
+              {index === tabs.length - 1 ? (
+                <Button
+                  color="primary"
+                  className="justify-self-end ml-auto border border-primary-stronger"
+                  style={{
+                    boxShadow: `0 0 ${tokens.space16} ${tokens.primaryDimmer}`,
+                  }}
+                  type="submit"
+                >
+                  <RiUploadIcon />
+                  Publish to Community
+                </Button>
+              ) : null}
+            </View>
           </Surface>
 
           <Surface
@@ -175,7 +227,7 @@ export function PostDialog() {
             className="w-full flex-1 p-4 overflow-hidden"
           >
             <Text color="dimmer">Preview</Text>
-            <View className="gap-4 px-20">
+            <View className="gap-4 px-20 py-10">
               <PostSkeleton variant="bottom" />
               <PostPreview
                 author={session}
@@ -196,7 +248,7 @@ export function PostDialog() {
 
 function Tag({ name, onClose }: { name: string; onClose: () => void }) {
   return (
-    <View className="w-fit flex-row items-center gap-0.5 h-6 px-1.5 bg-interactive border border-interactive rounded-full select-none">
+    <View className="w-fit flex-row items-center gap-0.5 h-7 px-2 bg-interactive border border-interactive rounded-full select-none">
       <Text size="small">
         <span className="text-foreground-dimmest">#</span>
         <span className="text-foreground-dimmer">{name}</span>
@@ -247,11 +299,11 @@ const TagInput = forwardRef<
   }, [props.value]);
 
   return (
-    <View className="flex-row gap-1 border border-interactive-active rounded-full focus-within:border-interactive-active w-fit items-center h-6 px-1.5 pr-2.5">
+    <View className="flex-row gap-1 border border-interactive-active rounded-full focus-within:border-interactive-active w-fit items-center h-7 pl-2 pr-3">
       <RiAddIcon />
       <input
         className={cn(
-          "border-none outline-none text-small bg-transparent placeholder:text-foreground-dimmest px-0 py-0.5",
+          "border-none outline-none text-small bg-transparent placeholder:text-foreground-dimmest px-0",
           className
         )}
         maxLength={60}
@@ -265,58 +317,17 @@ const TagInput = forwardRef<
 });
 
 function TabsContent({
-  setTab,
   value,
   children,
   ...props
 }: Omit<ComponentProps<typeof TabsContentRoot>, "value" | "asChild"> & {
-  setTab: Dispatch<SetStateAction<TabValue>>;
   value: TabValue;
 }) {
   const index = tabs.indexOf(value);
 
   return (
     <TabsContentRoot value={value} asChild {...props}>
-      <View className="gap-4 h-full flex-1 relative">
-        {children}
-
-        <View className="flex-row absolute bottom-0 w-full">
-          {index > 0 ? (
-            <Button
-              className="self-start"
-              type="button"
-              onClick={() => setTab(tabs[index - 1])}
-            >
-              <RiArrowLeftIcon /> Back
-            </Button>
-          ) : null}
-
-          {index < tabs.length - 1 ? (
-            <Button
-              color="primary"
-              className="justify-self-end ml-auto"
-              type="button"
-              onClick={() => setTab(tabs[index + 1])}
-            >
-              Next <RiArrowRightIcon />
-            </Button>
-          ) : null}
-
-          {index === tabs.length - 1 ? (
-            <Button
-              color="primary"
-              className="justify-self-end ml-auto border border-primary-stronger"
-              style={{
-                boxShadow: `0 0 ${tokens.space16} ${tokens.primaryDimmer}`,
-              }}
-              type="submit"
-            >
-              <RiUploadIcon />
-              Publish to Community
-            </Button>
-          ) : null}
-        </View>
-      </View>
+      <View className="gap-4 h-full flex-1 relative">{children}</View>
     </TabsContentRoot>
   );
 }

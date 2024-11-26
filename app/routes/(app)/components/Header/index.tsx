@@ -9,19 +9,25 @@ import { User } from "@prisma/client";
 import { Button } from "natmfat/components/Button";
 import { Nullable } from "~/lib/types";
 import { ROUTE as LOGIN_ROUTE } from "~/routes/(auth).login";
+import { usePostDialogContext } from "../CreatePostDialog";
 
 export interface HeaderProps {
   user: Nullable<Pick<User, "username" | "avatarUrl">>;
 }
 
 export function Header({ user }: HeaderProps) {
+  const { setOpen } = usePostDialogContext();
   return (
     <header className="py-6 flex flex-row justify-between">
       <Logo />
       <View className="flex-row items-center">
         {user ? (
           <>
-            <IconButton alt="Create post" className="h-8 w-8">
+            <IconButton
+              alt="Create post"
+              className="h-8 w-8"
+              onClick={() => setOpen(true)}
+            >
               <RiAddIcon />
             </IconButton>
             <Notifications />
