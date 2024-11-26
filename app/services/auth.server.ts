@@ -34,11 +34,11 @@ authenticator.use(
         profileId: email,
       },
     });
-    Router.assertResponse(provider, "a user with this email does not exist");
+    Router.assertResponse(provider, "A user with this email does not exist");
 
     // provider does exist, check password & return user data
     const result = await bcrypt.compare(password, provider.profilePassword);
-    Router.assertResponse(result, "incorrect password");
+    Router.assertResponse(result, "Incorrect password");
     return provider.user;
   }),
   UserProviderStrategy.FORM

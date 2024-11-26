@@ -34,7 +34,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
   Router.assertResponse(user, notFound());
   return {
     posts: user.posts,
-    comments: user?.comments,
+    comments: user.comments,
   };
 }
 

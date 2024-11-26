@@ -24,8 +24,10 @@ import {
 import { RiGlobalIcon } from "natmfat/icons/RiGlobalIcon";
 import { prisma } from "~/.server/prisma";
 import { Post } from "./components/Post";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData, useNavigate } from "@remix-run/react";
 import { usePostDialogContext } from "../(app)/components/CreatePostDialog";
+import { useSessionStore } from "../(app)/hooks/useSessionStore";
+import { ROUTE as LOGIN_ROUTE } from "../(auth).login";
 
 export const ROUTE = "/";
 
@@ -58,12 +60,20 @@ export default function Index() {
   const { posts } = useLoaderData<typeof loader>();
   const { setOpen } = usePostDialogContext();
 
+  const session = useSessionStore((store) => store.data);
+  const navigate = useNavigate();
+
   return (
     <>
       <Section>
         <View className="flex-row justify-between items-center">
           <Heading>Community</Heading>
-          <Button color="primary" onClick={() => setOpen(true)}>
+          <Button
+            color="primary"
+            onClick={() => {
+              session ? setOpen(true) : navigate(LOGIN_ROUTE);
+            }}
+          >
             <RiUploadIcon />
             Publish a Project
           </Button>

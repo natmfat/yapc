@@ -38,10 +38,9 @@ interface UserDetailsProps {
 
 export function UserProfile({ user, stars }: UserDetailsProps) {
   const userSession = useSessionStore((state) => state.data);
-  const { addToast } = useToastContext();
-
   const owner = userSession && userSession.username === user.username;
 
+  const { addToast } = useToastContext();
   const copyLinkToProfile = useCallback(() => {
     copyToClipboard(
       new URL(createRoute(user.username), location.href).toString()
