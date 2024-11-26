@@ -324,7 +324,7 @@ const TagInput = forwardRef<
           "border-none outline-none text-small bg-transparent placeholder:text-foreground-dimmest px-0",
           className
         )}
-        maxLength={40}
+        maxLength={30}
         onChange={onChange}
         ref={mergeRefs(ref, inputRef)}
         placeholder="Add a tag"

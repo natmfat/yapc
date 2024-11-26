@@ -132,8 +132,13 @@ model Comment {
   post     Post @relation(fields: [postId], references: [id])
   postId   Int
 
-  body  Int
+  body  String
   stars User[]
+
+  // https://github.com/prisma/prisma/discussions/10406
+  replies  Comment[] @relation("commentReplies")
+  parent   Comment?  @relation("commentReplies", fields: [parentId], references: [id])
+  parentId Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

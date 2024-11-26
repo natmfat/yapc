@@ -3,50 +3,96 @@ import { Form, useLoaderData } from "@remix-run/react";
 import { View } from "natmfat/components/View";
 import { RemixAction, Router } from "remix-endpoint";
 import { prisma } from "~/.server/prisma";
-import { notAuthorized, notFound } from "~/.server/routeUtils";
+import { asssertUser, notAuthorized, notFound } from "~/.server/routeUtils";
 import { Author } from "../(app)/components/Author";
 import { Heading } from "natmfat/components/Heading";
 import { Button } from "natmfat/components/Button";
 import { RiShiningIcon } from "natmfat/icons/RiShiningIcon";
 import { Timestamp } from "natmfat/components/Timestamp";
-import { RiAddIcon } from "natmfat/icons/RiAddIcon";
-import { tokens } from "natmfat/lib/tokens";
-import { Text } from "natmfat/components/Text";
 import { RiLinkIcon } from "natmfat/icons/RiLinkIcon";
-import { Pill } from "natmfat/components/Pill";
-import { MultilineInput } from "natmfat/components/MultilineInput";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "natmfat/components/Tabs";
 import { MarkdownInput } from "./components/MarkdownInput";
 import { Image } from "~/components/Image";
 import { useToastContext } from "natmfat/components/Toast";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { copyToClipboard } from "natmfat/lib/copyToClipboard";
 import { createIntent } from "remix-endpoint/react/createIntent";
 import { zfd } from "zod-form-data";
 import { authenticator } from "~/services/auth.server";
 import { redirectBack } from "remix-utils/redirect-back";
 import { ROUTE as DASHBOARD_ROUTE } from "../(app)._index";
+import { Pill } from "natmfat/components/Pill";
+import { Markdown } from "./components/Markdown";
+import { Comment } from "./components/Comment";
+import { MarkdownForm } from "./components/MarkdownForm";
 
 enum ActionIntent {
-  STAR_POST = "star_post",
   CREATE_COMMENT = "create_comment",
+  UPDATE_COMMENT = "update_comment",
+  DELETE_COMMENT = "delete_comment",
+  STAR_POST = "star_post",
 }
 
 const Intent = createIntent<ActionIntent>();
 
+// @todo catch in case post id does not exist
+
 export const action = new RemixAction()
+  .register({
+    intent: ActionIntent.CREATE_COMMENT,
+    validate: {
+      formData: zfd.formData({ postId: zfd.numeric(), body: zfd.text() }),
+    },
+    handler: async ({ formData: { postId, body }, context: { request } }) => {
+      const user = await asssertUser(request);
+      await prisma.comment.create({
+        data: {
+          authorId: user.id,
+          postId,
+          body,
+          // automatically upvote your own comment
+          stars: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+
+      // technically could return anything here and Remix would handle it fine,
+      // but this should be a good form
+      return redirectBack(request, {
+        fallback: DASHBOARD_ROUTE,
+      });
+    },
+  })
+  .register({
+    intent: ActionIntent.UPDATE_COMMENT,
+    validate: {
+      formData: zfd.formData({
+        postId: zfd.numeric(),
+        commentId: zfd.numeric(),
+        body: zfd.text(),
+      }),
+    },
+    handler: async () => {},
+  })
+  .register({
+    intent: ActionIntent.DELETE_COMMENT,
+    validate: {
+      formData: zfd.formData({
+        postId: zfd.numeric(),
+        commentId: zfd.numeric(),
+      }),
+    },
+    handler: async () => {},
+  })
   .register({
     intent: ActionIntent.STAR_POST,
     validate: {
       formData: zfd.formData({ postId: zfd.numeric() }),
     },
     handler: async ({ formData: { postId }, context: { request } }) => {
-      // require auth
+      // require auth to upvote posts
       const user = await authenticator.isAuthenticated(request);
       Router.assertResponse(user, notAuthorized());
 
@@ -65,7 +111,7 @@ export const action = new RemixAction()
         })
         .then((r) => Boolean(r));
 
-      // update post with star
+      // link or unlink user from stars, which effectively toggles your upvote
       await prisma.post.update({
         where: { id: postId },
         data: {
@@ -95,7 +141,16 @@ export async function loader({
     },
     include: {
       author: true,
-      tags: true,
+      tags: {
+        select: {
+          name: true,
+        },
+      },
+      comments: {
+        include: {
+          author: true,
+        },
+      },
       _count: {
         select: {
           stars: true,
@@ -115,6 +170,8 @@ export function createRoute(username: string, postSlug: string) {
 
 export default function PostPage() {
   const { post } = useLoaderData<typeof loader>();
+
+  const [comment, setComment] = useState("");
 
   const route = createRoute(post.author.username, post.slug);
   const { addToast } = useToastContext();
@@ -159,16 +216,26 @@ export default function PostPage() {
         </span>
       </View>
 
-      {/* {post.tags.map(({ name }) => (
-        <Pill>#{name}</Pill>
-      ))} */}
+      <View className="flex-row flex-wrap gap-2">
+        {post.tags.map(({ name }) => (
+          <Pill key={name}>#{name}</Pill>
+        ))}
+      </View>
 
-      <View>{post.body}</View>
+      {post.body ? <Markdown body={post.body} /> : null}
 
-      <MarkdownInput placeholder="Add your comment here..." />
-      <Button color="primary" className="w-fit self-end" disabled>
-        Comment
-      </Button>
+      <View asChild>
+        <MarkdownForm action={route} method="POST">
+          <Intent value={ActionIntent.CREATE_COMMENT} />
+          <input type="hidden" name="postId" value={post.id} />
+        </MarkdownForm>
+      </View>
+
+      <View className="gap-4">
+        {post.comments.map((comment) => (
+          <Comment key={comment.id} {...comment} />
+        ))}
+      </View>
     </View>
   );
 }
