@@ -66,7 +66,14 @@ export const LabeledInput = forwardRef<
           ) : null}
         </View>
 
-        <Comp id={name} name={name} ref={ref} onChange={onChange} {...props} />
+        <Comp
+          id={name}
+          name={name}
+          ref={ref}
+          onChange={onChange}
+          maxLength={maxLength}
+          {...props}
+        />
       </View>
     );
   }
