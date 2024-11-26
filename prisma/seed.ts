@@ -85,6 +85,21 @@ async function main() {
         type: PostType.ARTICLE,
       },
     }),
+    // like your own post
+    prisma.post.update({
+      where: {
+        id: 1,
+      },
+      data: {
+        stars: {
+          connect: [
+            {
+              id: 1,
+            },
+          ],
+        },
+      },
+    }),
   ]);
   process.exit(0);
 }

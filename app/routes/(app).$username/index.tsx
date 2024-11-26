@@ -19,10 +19,22 @@ export async function loader({ params }: LoaderFunctionArgs) {
     where: { username: params.username },
     include: {
       posts: {
-        select: { stars: true },
+        select: {
+          _count: {
+            select: {
+              stars: true,
+            },
+          },
+        },
       },
       comments: {
-        select: { stars: true },
+        select: {
+          _count: {
+            select: {
+              stars: true,
+            },
+          },
+        },
       },
     },
   });

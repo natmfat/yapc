@@ -6,8 +6,24 @@ export function getStars(
   user: Pick<
     Prisma.UserGetPayload<{
       include: {
-        posts: { select: { stars: true } };
-        comments: { select: { stars: true } };
+        posts: {
+          select: {
+            _count: {
+              select: {
+                stars: true;
+              };
+            };
+          };
+        };
+        comments: {
+          select: {
+            _count: {
+              select: {
+                stars: true;
+              };
+            };
+          };
+        };
       };
     }>,
     "posts" | "comments"
@@ -15,10 +31,10 @@ export function getStars(
 ) {
   let stars = 0;
   for (const post of user.posts) {
-    stars += post.stars;
+    stars += post._count.stars;
   }
   for (const comment of user.comments) {
-    stars += comment.stars;
+    stars += comment._count.stars;
   }
   return stars;
 }

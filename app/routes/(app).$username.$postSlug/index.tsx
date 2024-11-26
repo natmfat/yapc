@@ -34,7 +34,15 @@ export async function loader({
       author: { username },
       slug: postSlug,
     },
-    include: { author: true, tags: true },
+    include: {
+      author: true,
+      tags: true,
+      _count: {
+        select: {
+          stars: true,
+        },
+      },
+    },
   });
 
   Router.assertResponse(post, notFound());
@@ -62,7 +70,7 @@ export default function PostPage() {
 
         <View className="flex-row gap-2 flex-shrink-0">
           <Button>
-            <RiShiningIcon /> {post.stars}
+            <RiShiningIcon /> {post._count.stars}
           </Button>
           <Button>
             <RiLinkIcon />

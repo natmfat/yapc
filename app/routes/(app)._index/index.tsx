@@ -42,7 +42,7 @@ export async function loader() {
         tags: true,
         author: true,
         _count: {
-          select: { comments: true },
+          select: { comments: true, stars: true },
         },
       },
       orderBy: {

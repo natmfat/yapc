@@ -24,7 +24,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
         include: {
           tags: true,
           _count: {
-            select: { comments: true },
+            select: { comments: true, stars: true },
           },
         },
       },
@@ -41,6 +41,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 export default function PortfoliosPage() {
   const { posts, comments } = useLoaderData<typeof loader>();
   const user = useUserStore((state) => state.data);
+  invariant(user, "Expected user to exist on username route");
 
   return (
     <Tabs defaultValue="posts" className="w-full gap-0">

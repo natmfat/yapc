@@ -66,7 +66,7 @@ export function PostPreview({
             className="bg-transparent flex-row items-center gap-1"
           >
             {displayTags.map((tag) => (
-              <Pill>#{tag}</Pill>
+              <Pill key={tag}>#{tag}</Pill>
             ))}
             {remainingTags > 0 ? (
               <Text size="small" color="dimmer">

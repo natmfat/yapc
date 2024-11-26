@@ -31,11 +31,16 @@ model User {
   createdAt DateTime @default(now())
 
   providers     UserProvider[]
-  posts         Post[]
   notifications Notification[]
-  comments      Comment[]
-  followers     Follows[]      @relation("following")
-  following     Follows[]      @relation("follower")
+
+  comments Comment[] @relation("authoredComment")
+  posts    Post[]    @relation("authoredPost")
+
+  starredPosts    Post[]
+  starredComments Comment[]
+
+  followers Follows[] @relation("following")
+  following Follows[] @relation("follower")
 }
 
 enum UserRole {
@@ -84,22 +89,22 @@ model Notification {
 model Post {
   id Int @id @default(autoincrement())
 
-  author   User? @relation(fields: [authorId], references: [id])
-  authorId Int?
+  author   User @relation("authoredPost", fields: [authorId], references: [id])
+  authorId Int
 
   published Boolean @default(false)
 
   type         PostType
   slug         String
   thumbnailUrl String
-  heading      String   @db.VarChar(255)
+  heading      String    @db.VarChar(255)
   body         String?
   embed        String?
+  comments     Comment[]
+  tags         Tag[]
 
-  stars    Int       @default(0)
-  views    Int       @default(0)
-  comments Comment[]
-  tags     Tag[]
+  views Int    @default(0)
+  stars User[]
 
   featureRequest FeatureRequest?
 
@@ -120,14 +125,15 @@ model Tag {
 }
 
 model Comment {
-  id       Int  @id @default(autoincrement())
-  author   User @relation(fields: [authorId], references: [id])
+  id Int @id @default(autoincrement())
+
+  author   User @relation("authoredComment", fields: [authorId], references: [id])
   authorId Int
   post     Post @relation(fields: [postId], references: [id])
   postId   Int
 
   body  Int
-  stars Int
+  stars User[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

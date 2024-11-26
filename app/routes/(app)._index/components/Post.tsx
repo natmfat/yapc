@@ -1,7 +1,6 @@
-import { Prisma, User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { Link } from "@remix-run/react";
 import invariant from "invariant";
-import { Avatar } from "natmfat/components/Avatar";
 import { Button } from "natmfat/components/Button";
 import { Heading } from "natmfat/components/Heading";
 import { Interactive } from "natmfat/components/Interactive";
@@ -13,7 +12,6 @@ import { View } from "natmfat/components/View";
 import { RiChat4Icon } from "natmfat/icons/RiChat4Icon";
 import { RiEyeIcon } from "natmfat/icons/RiEyeIcon";
 import { RiShiningIcon } from "natmfat/icons/RiShiningIcon";
-import { tokens } from "natmfat/lib/tokens";
 import { ReactNode } from "react";
 import { createRoute } from "~/routes/(app).$username.$postSlug";
 import { Author } from "~/routes/(app)/components/Author";
@@ -24,7 +22,7 @@ export interface PostProps {
       tags: true;
       author: true;
       _count: {
-        select: { comments: true };
+        select: { comments: true; stars: true };
       };
     };
   }>;
@@ -33,7 +31,7 @@ export interface PostProps {
 export const MAX_TAGS = 3;
 
 export function Post({ post }: PostProps) {
-  invariant(post.author, "expected user to exist");
+  invariant(post.author, "Expected post author to exist"); // @todo deleted users?
 
   const tags = post.tags.slice(0, MAX_TAGS);
   const remainingTags = tags.length - MAX_TAGS;
@@ -50,7 +48,7 @@ export function Post({ post }: PostProps) {
           </span>
         </View>
         <Button className="w-20">
-          <RiShiningIcon /> {post.stars}
+          <RiShiningIcon /> {post._count.stars}
         </Button>
       </View>
 
@@ -71,7 +69,7 @@ export function Post({ post }: PostProps) {
             <View className="flex-row justify-between">
               <View className="flex-row">
                 <PostStat icon={<RiChat4Icon />} count={post._count.comments} />
-                <PostStat icon={<RiShiningIcon />} count={post.stars} />
+                <PostStat icon={<RiShiningIcon />} count={post._count.stars} />
                 <PostStat icon={<RiEyeIcon />} count={post.views} />
               </View>
               <Surface
@@ -79,7 +77,7 @@ export function Post({ post }: PostProps) {
                 className="bg-transparent flex-row items-center gap-1"
               >
                 {post.tags.map((tag) => (
-                  <Pill>#{tag.name}</Pill>
+                  <Pill key={tag.name}>#{tag.name}</Pill>
                 ))}
                 {remainingTags > 0 ? (
                   <Text size="small" color="dimmer">
