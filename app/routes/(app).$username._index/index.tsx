@@ -28,7 +28,11 @@ export async function loader({ params }: LoaderFunctionArgs) {
           },
         },
       },
-      comments: true,
+      comments: {
+        include: {
+          replies: true,
+        },
+      },
     },
   });
   Router.assertResponse(user, notFound());
@@ -67,7 +71,7 @@ export default function PortfoliosPage() {
           />
         ))}
       </TabsContent>
-      <TabsContent value="replies">Replies</TabsContent>
+      <TabsContent value="replies"></TabsContent>
     </Tabs>
   );
 }

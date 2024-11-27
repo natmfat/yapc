@@ -1,11 +1,19 @@
-import { User } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { Avatar } from "natmfat/components/Avatar";
 import { Text } from "natmfat/components/Text";
 import { View } from "natmfat/components/View";
 import { tokens } from "natmfat/lib/tokens";
-import { ReactNode } from "react";
 
-export function Author({ user }: { user: User | null }) {
+export function Author({
+  user,
+}: {
+  user: Prisma.UserGetPayload<{
+    select: {
+      avatarUrl: true;
+      username: true;
+    };
+  }> | null;
+}) {
   if (!user) {
     // @todo better deleted user signifier
     return <Text>Deleted User</Text>;

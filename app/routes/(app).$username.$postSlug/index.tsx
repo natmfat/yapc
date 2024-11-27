@@ -25,28 +25,36 @@ import { Markdown } from "./components/Markdown";
 import { Comment } from "./components/Comment";
 import { MarkdownForm } from "./components/MarkdownForm";
 
-enum ActionIntent {
+export enum ActionIntent {
   CREATE_COMMENT = "create_comment",
   UPDATE_COMMENT = "update_comment",
   DELETE_COMMENT = "delete_comment",
   STAR_POST = "star_post",
 }
 
-const Intent = createIntent<ActionIntent>();
+export const Intent = createIntent<ActionIntent>();
 
-// @todo catch in case post id does not exist
+// @todo catch in case post id/parent id does not exist
 
-export const action = new RemixAction()
+export const action = new RemixAction({ logError: console.log })
   .register({
     intent: ActionIntent.CREATE_COMMENT,
     validate: {
-      formData: zfd.formData({ postId: zfd.numeric(), body: zfd.text() }),
+      formData: zfd.formData({
+        parentId: zfd.numeric().optional(),
+        postId: zfd.numeric(),
+        body: zfd.text(),
+      }),
     },
-    handler: async ({ formData: { postId, body }, context: { request } }) => {
+    handler: async ({
+      formData: { parentId, postId, body },
+      context: { request },
+    }) => {
       const user = await asssertUser(request);
       await prisma.comment.create({
         data: {
           authorId: user.id,
+          parentId,
           postId,
           body,
           // automatically upvote your own comment
@@ -140,15 +148,26 @@ export async function loader({
       slug: postSlug,
     },
     include: {
-      author: true,
+      author: { select: { username: true, avatarUrl: true } },
       tags: {
         select: {
           name: true,
         },
       },
       comments: {
+        where: {
+          parentId: null,
+        },
         include: {
           author: true,
+          replies: {
+            include: {
+              author: { select: { username: true, avatarUrl: true } },
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       },
       _count: {
@@ -201,7 +220,7 @@ export default function PostPage() {
             <RiLinkIcon />
             Copy Link
           </Button>
-          <Form action={route} method="POST">
+          <Form method="POST">
             <Intent value={ActionIntent.STAR_POST} />
             <input type="hidden" name="postId" value={post.id} />
             <Button type="submit">
@@ -229,7 +248,7 @@ export default function PostPage() {
       {post.body ? <Markdown body={post.body} /> : null}
 
       <View asChild>
-        <MarkdownForm action={route} method="POST">
+        <MarkdownForm method="POST">
           <Intent value={ActionIntent.CREATE_COMMENT} />
           <input type="hidden" name="postId" value={post.id} />
         </MarkdownForm>
