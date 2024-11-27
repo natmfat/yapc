@@ -160,9 +160,9 @@ export async function loader({
         },
         include: {
           author: true,
-          replies: {
-            include: {
-              author: { select: { username: true, avatarUrl: true } },
+          _count: {
+            select: {
+              replies: true,
             },
           },
         },
